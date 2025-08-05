@@ -11,6 +11,7 @@ import StartTripPage from './pages/StartTrip'
 import { fetchActiveTrip } from './store/TripSlice'
 import ActiveTrip from './pages/ActiveTrip'
 import ActiveTripPage from './pages/ActiveTrip'
+import CompleteTripPage from './pages/CompleteTrip'
 
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
 					<Route path='/' element={<Main />} />
 					<Route path='/trip/start' element={<StartTripPage />} />
 					<Route path='/trip/active' element={<ActiveTripPage></ActiveTripPage>}></Route>
-					<Route path='/trip/complete' element={<ActiveTripPage></ActiveTripPage>}></Route>
+					<Route path='/trip/complete' element={<CompleteTripPage></CompleteTripPage>}></Route>
 					<Route path='*' element={<NotFoundPage />} />
 				</Routes>
 			</div>

@@ -66,9 +66,9 @@ export const fetchActiveTrip = createAsyncThunk('trip/fetch', async (_, { reject
 	}
 });
 
-export const completeTrip = createAsyncThunk('trip/complete', async (_, { rejectWithValue }) => {
+export const completeTrip = createAsyncThunk('trip/complete', async (credentials, { rejectWithValue }) => {
 	try {
-		const response = await completeTripAPI();
+		const response = await completeTripAPI(credentials);
 		if (response.data.success) {
 			return response.data;
 		} else {
@@ -98,6 +98,7 @@ export const TripSlice = createSlice({
 				state.error = null;
 			})
 			.addCase(startTrip.fulfilled, (state, action) => {
+				console.log(action.payload.data)
 				state.loading = false;
 				state.activeTrip = action.payload.data;
 				state.error = null;
@@ -118,9 +119,6 @@ export const TripSlice = createSlice({
 
 				const incomingTrip = action.payload.data;
 
-				// --- İŞTE SİHİRLİ KONTROL ---
-				// Eğer gelen veri null değilse VE mevcut veri ile string halleri farklıysa güncelle.
-				// JSON.stringify, derin karşılaştırma için en basit yöntemdir.
 				if (incomingTrip && JSON.stringify(state.activeTrip) !== JSON.stringify(incomingTrip)) {
 					console.log("API'den farklı veri geldi, activeTrip güncelleniyor.");
 					state.activeTrip = incomingTrip;

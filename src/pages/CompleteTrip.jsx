@@ -4,14 +4,15 @@ import Sidebar from '../components/GeneralComponents/Sidebar'
 import Footer from '../components/GeneralComponents/Footer'
 import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from 'react'
+import CompleteTripComponent from '../components/CompleteTripPageComponents/CompleteTripComponent'
 
-function CompleteTrip() {
+function CompleteTripPage() {
 
     const dispatch = useDispatch()
-    const {activeTrip} = useSelector(store => store.trip)
+    const { activeTrip } = useSelector(store => store.trip)
 
     if (!activeTrip) {
-        return "<h1>Trip bilgisi henüz gelmedi</h1>"; 
+        return "<h1>Trip bilgisi henüz gelmedi</h1>";
     }
 
 
@@ -27,9 +28,9 @@ function CompleteTrip() {
                 <section className='section dashboard'>
                     <div className='row'>
                         <div className='col-12'>
-                            <div className='card'><div className='card-body'><h5 className='card-title'>Proje Alanı</h5><p>İçerik buraya...</p></div></div>
-                            <div className='card'><div className='card-body' style={{ height: '1200px' }}>
-                                <h5 className='card-title'>Kaydırmayı Test Et</h5><p>Bu alan, sidebar ve header sabitken ana içeriğin kaydığını göstermek için uzatılmıştır.</p></div></div>
+
+                            <CompleteTripComponent></CompleteTripComponent>
+                        
                         </div>
                     </div>
                 </section>
@@ -39,4 +40,4 @@ function CompleteTrip() {
     )
 }
 
-export default CompleteTrip
+export default CompleteTripPage

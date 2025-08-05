@@ -1,62 +1,53 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { completeTrip } from '../store/TripSlice'; // Thunk aksiyonunuzun yolunu güncelleyin
+import { completeTrip } from '../../store/TripSlice';
 
 function CompleteTripComponent() {
-    // Redux store'dan gerekli verileri ve hook'ları alıyoruz
+
     const { activeTrip } = useSelector(store => store.trip);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Form alanları için state'leri tanımlıyoruz
     const [lastKm, setLastKm] = useState('');
     const [lastPhoto, setLastPhoto] = useState(null);
     const [notes, setNotes] = useState('');
     
-    // API isteği sırasında butonu devre dışı bırakmak için bir yükleme state'i
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Form gönderildiğinde çalışacak ana fonksiyon
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Basit bir ön kontrol
-        if (!lastKm || !lastPhoto) {
+        if (!lastKm) {
             alert('Lütfen kilometre ve fotoğraf alanlarını doldurun.');
             return;
         }
 
         setIsSubmitting(true);
 
-        // API'ye multipart/form-data olarak göndereceğimiz için FormData kullanıyoruz
         const formData = new FormData();
         formData.append('last_km', lastKm);
         formData.append('last_photo', lastPhoto);
         formData.append('notes', notes);
 
         try {
-            // Thunk'a hem yolculuk ID'sini hem de form verisini yolluyoruz
-            await dispatch(completeTrip({ tripId: activeTrip.id, formData })).unwrap();
+            await dispatch(completeTrip({ id: activeTrip.id, formData })).unwrap();
             
             alert('Yolculuk başarıyla tamamlandı. Ana sayfaya yönlendiriliyorsunuz.');
-            navigate('/'); // Başarılı olunca ana sayfaya yönlendir
-
+            navigate('/');
         } catch (error) {
             alert(`Hata: ${error.message || 'Yolculuk tamamlanamadı.'}`);
         } finally {
-            setIsSubmitting(false); // İşlem bitince butonu tekrar aktif et
+            setIsSubmitting(false); 
         }
     };
 
-    // Dosya input'u değiştiğinde çalışacak fonksiyon
     const handleFileChange = (event) => {
         if (event.target.files && event.target.files[0]) {
             setLastPhoto(event.target.files[0]);
         }
     };
 
-    // Eğer bir sebepten ötürü bu sayfaya aktif yolculuk olmadan gelinirse
     if (!activeTrip) {
         return (
             <div className="alert alert-warning" role="alert">
@@ -70,7 +61,7 @@ function CompleteTripComponent() {
             <div className="card-header">
                 <h5 className="card-title mb-0">Yolculuğu Tamamla</h5>
             </div>
-            <div className="card-body mt-3">
+            <div className="card-body mt-1">
                 <p className="card-text text-muted mb-4">
                     Lütfen aracı teslim etmeden önce son bilgileri eksiksiz olarak girin.
                 </p>
@@ -93,10 +84,8 @@ function CompleteTripComponent() {
                     
                     <hr />
 
-                    {/* --- ZORUNLU GİRİŞ ALANLARI --- */}
                     <legend className="h6 mb-3">Teslimat Bilgileri</legend>
                     <div className="row">
-                        {/* Kilometre Bilgisi */}
                         <div className="col-md-6 mb-3">
                             <label htmlFor="lastKmInput" className="form-label">
                                 Son Kilometre <span className="text-danger">*</span>
@@ -115,7 +104,6 @@ function CompleteTripComponent() {
                             </div>
                         </div>
 
-                        {/* Fotoğraf Yükleme */}
                         <div className="col-md-6 mb-3">
                             <label htmlFor="lastPhotoInput" className="form-label">
                                 Araç Sonu Fotoğrafı <span className="text-danger">*</span>
@@ -126,7 +114,7 @@ function CompleteTripComponent() {
                                 id="lastPhotoInput"
                                 accept="image/*"
                                 onChange={handleFileChange}
-                                required
+                                
                             />
                         </div>
                     </div>

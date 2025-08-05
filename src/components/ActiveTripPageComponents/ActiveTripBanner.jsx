@@ -24,7 +24,7 @@ function ActiveTripBanner() {
     return (
 
         <div
-            className="alert alert-warning d-flex align-items-center rounded-0 shadow-sm p-2"
+            className="alert alert-success d-flex align-items-center rounded-0 shadow-sm p-2"
             role="alert"
             style={{
                 position: 'fixed',
@@ -37,8 +37,6 @@ function ActiveTripBanner() {
                 alignItems: 'center',
                 margin: '0',
                 padding: '10px 20px',
-                backgroundColor: '#fff3cd',
-                borderBottom: '1px solid #ffc107'
             }}
         >
 
