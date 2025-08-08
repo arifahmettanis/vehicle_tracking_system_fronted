@@ -34,7 +34,7 @@ function Header() {
                                     <li><hr className="dropdown-divider" /></li>
                                     <li><a className="dropdown-item d-flex align-items-center" href="#"><i className="bi bi-person"></i><span>Profilim</span></a></li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><a className="dropdown-item d-flex align-items-center" href="#"><i className="bi bi-box-arrow-right"></i><span>Çıkış Yap</span></a></li>
+                                    <li><a className="dropdown-item d-flex align-items-center" onClick={handleLogout}><i className="bi bi-box-arrow-right"></i><span>Çıkış Yap</span></a></li>
                                 </ul>
                             </li>
                         </ul>

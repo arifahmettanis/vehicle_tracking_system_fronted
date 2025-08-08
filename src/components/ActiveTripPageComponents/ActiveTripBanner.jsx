@@ -44,7 +44,7 @@ function ActiveTripBanner() {
 
             <div className="flex-grow-1">
                 <div>
-                    <strong>Aktif Seyehat</strong> - <TimeCounter time={activeTrip.start_time} />
+                    <strong>Aktif Seyehat</strong> - <TimeCounter time={activeTrip.assigned_date} />
                     <br />
                     <span>{activeTrip.brand} {activeTrip.model} - <strong>{activeTrip.plate}</strong></span>
                 </div>

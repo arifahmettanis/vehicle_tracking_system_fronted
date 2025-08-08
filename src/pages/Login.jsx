@@ -1,24 +1,54 @@
 import React from 'react'
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { login} from '../store/UserSlice'
+import { login } from '../store/UserSlice'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 export default function LoginPage() {
 
-	const [username, setUsername] = useState('tunaunal')
-	const [password, setPassword] = useState('1')
+	const [username, setUsername] = useState('ariftanis')
+	const [password, setPassword] = useState('3334')
 
 	const user = useSelector((store) => store.user)
 	const dispatch = useDispatch()
-	
-	const handleLogin = (e) => {
-		e.preventDefault()
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	console.log(location)
+
+	const handleLogin = async (event) => {
+		event.preventDefault();
+
 		if (!username || !password) {
-			alert("Kullanıcı adı veya şifre boş olamaz")
-			return
+			Swal.fire({
+				icon: 'warning',
+				title: 'Eksik Bilgi',
+				text: 'Kullanıcı adı ve şifre alanları zorunludur.',
+			});
+			return;
 		}
-		dispatch(login({username:username,password:password}))
-		
-	}
+
+		try {
+			console.log('Giriş isteği gönderiliyor...');
+			const resultAction = await dispatch(login({ username, password })).unwrap();
+			console.log('Giriş başarılı, dönen veri:', resultAction);
+
+			if (location) {
+				navigate(location.pathname + location.search)
+			}else{
+				navigate('/');
+			}
+
+		} catch (err) {
+			console.error('Giriş hatası:', err);
+			Swal.fire({
+				icon: 'error',
+				title: 'Giriş Başarısız',
+				text: err.message || 'Kullanıcı adı veya şifre hatalı.',
+			});
+		}
+	};
 	return (
 		<>
 			<main>

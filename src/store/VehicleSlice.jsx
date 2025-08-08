@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getVehicleAPI } from './api';
+import { createVehicleAPI, getVehicleAPI } from './api';
 
 const initialState = {
 	selectedVehicle: localStorage.getItem('selected_vechile') ? JSON.parse(localStorage.getItem('selected_vechile')) : null,
@@ -11,6 +11,24 @@ const initialState = {
 export const getVehicle = createAsyncThunk('vehicle/get', async (credentials, { rejectWithValue }) => {
 	try {
 		const response = await getVehicleAPI(credentials);
+		if (response.data.success) {
+			return response.data;
+		} else {
+			return rejectWithValue(response.data);
+		}
+	} catch (error) {
+		if (error.response && error.response.data) {
+			return rejectWithValue(error.response.data);
+		} else {
+			return rejectWithValue({ error: 'Beklenmedik bir hata oluştu. Araç çekilemedi' });
+		}
+	}
+});
+
+
+export const createVehicle = createAsyncThunk('vehicle/get', async (credentials, { rejectWithValue }) => {
+	try {
+		const response = await createVehicleAPI(credentials);
 		if (response.data.success) {
 			return response.data;
 		} else {

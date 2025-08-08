@@ -2,7 +2,6 @@
 import Header from '../components/GeneralComponents/Header'
 import Sidebar from '../components/GeneralComponents/Sidebar'
 import Footer from '../components/GeneralComponents/Footer'
-import ActiveTripBanner from '../components/ActiveTripPageComponents/ActiveTripBanner'
 
 function Main() {
 
@@ -13,7 +12,7 @@ function Main() {
             <Sidebar></Sidebar>
             <main id="main" className="main">
                 <div className="pagetitle">
-                    <h1>Ana Saykkkkfa</h1>
+                    <h1>Ana Sayfa</h1>
                     <nav><ol className="breadcrumb"><li className="breadcrumb-item"><a href="index.html">Anasayfa</a></li><li className="breadcrumb-item active">Genel Bakış</li></ol></nav>
                 </div>
                 <section className="section dashboard">

@@ -2,51 +2,70 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { completeTrip } from '../../store/TripSlice';
-
+import Swal from 'sweetalert2';
+import PhotoUploader from "../GeneralComponents/PhotoUploader"
 function CompleteTripComponent() {
-
+    // Mevcut hook'lar aynı kalıyor
     const { activeTrip } = useSelector(store => store.trip);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [lastKm, setLastKm] = useState('');
-    const [lastPhoto, setLastPhoto] = useState(null);
-    const [notes, setNotes] = useState('');
-    
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // --- DEĞİŞİKLİKLER BURADA BAŞLIYOR ---
 
+    // Form state'leri
+    const [lastKm, setLastKm] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // Tek bir fotoğraf yerine, bir fotoğraf dizisi tutacağız
+    const [photos, setPhotos] = useState([]);
+    const PHOTO_LIMIT = 5;
+
+    // Fotoğrafları state'e ekleyen fonksiyon
+    const handleFileChange = (event) => {
+        if (event.target.files && event.target.files[0] && photos.length < PHOTO_LIMIT) {
+            const newPhoto = event.target.files[0];
+            setPhotos(prevPhotos => [...prevPhotos, newPhoto]);
+        }
+    };
+
+    // Belirli bir fotoğrafı diziden çıkaran fonksiyon
+    const handleRemovePhoto = (indexToRemove) => {
+        setPhotos(prevPhotos => prevPhotos.filter((_, index) => index !== indexToRemove));
+    };
+
+    // Formu gönderen fonksiyon (güncellendi)
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!lastKm) {
-            alert('Lütfen kilometre ve fotoğraf alanlarını doldurun.');
+        if (photos.length === 5) {
+            Swal.fire('Uyarı', 'Lütfen en az 5 fotoğraf çekin.', 'warning');
             return;
         }
 
         setIsSubmitting(true);
 
         const formData = new FormData();
-        formData.append('last_km', lastKm);
-        formData.append('last_photo', lastPhoto);
-        formData.append('notes', notes);
+        formData.append('id', activeTrip.id);
+        formData.append('type', 'completeTrip');
 
+        // Tüm fotoğrafları döngüyle FormData'ya ekliyoruz
+        // PHP'nin bunu bir dizi olarak alabilmesi için `photos[]` ismini kullanıyoruz
+        photos.forEach((photo, index) => {
+            formData.append('photos[]', photo);
+        });
+        
         try {
-            await dispatch(completeTrip({ id: activeTrip.id, formData })).unwrap();
-            
-            alert('Yolculuk başarıyla tamamlandı. Ana sayfaya yönlendiriliyorsunuz.');
+            await dispatch(completeTrip(formData)).unwrap();
+            Swal.fire('Başarılı', 'Yolculuk başarıyla tamamlandı, anasayfaya yönlendiriliyorsunuz.', 'success');
             navigate('/');
         } catch (error) {
-            alert(`Hata: ${error.message || 'Yolculuk tamamlanamadı.'}`);
+            Swal.fire('Hata', error.message || 'Yolculuk tamamlanamadı', 'error');
         } finally {
-            setIsSubmitting(false); 
+            setIsSubmitting(false);
         }
     };
 
-    const handleFileChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            setLastPhoto(event.target.files[0]);
-        }
-    };
+    // --- JSX KISMINDAKİ DEĞİŞİKLİKLER ---
 
     if (!activeTrip) {
         return (
@@ -58,91 +77,31 @@ function CompleteTripComponent() {
 
     return (
         <div className="card">
+            {/* ... card-header ve bilgilendirme alanları aynı ... */}
             <div className="card-header">
                 <h5 className="card-title mb-0">Yolculuğu Tamamla</h5>
             </div>
             <div className="card-body mt-1">
-                <p className="card-text text-muted mb-4">
-                    Lütfen aracı teslim etmeden önce son bilgileri eksiksiz olarak girin.
-                </p>
+                <p className="card-text text-muted mb-4">Lütfen aracı teslim etmeden önce son bilgileri eksiksiz olarak girin.</p>
 
                 <form onSubmit={handleSubmit} noValidate>
-                    {/* --- BİLGİLENDİRME ALANLARI --- */}
                     <fieldset disabled>
                         <legend className="h6 mb-3">Teslim Edilen Araç</legend>
                         <div className="row">
-                            <div className="col-md-4 mb-3">
-                                <label htmlFor="plateInput" className="form-label">Plaka</label>
-                                <input type="text" id="plateInput" className="form-control" value={activeTrip.plate} />
-                            </div>
-                            <div className="col-md-8 mb-3">
-                                <label htmlFor="modelInput" className="form-label">Marka / Model</label>
-                                <input type="text" id="modelInput" className="form-control" value={`${activeTrip.brand} ${activeTrip.model}`} />
-                            </div>
+                            <div className="col-md-4 mb-3"><label htmlFor="plateInput" className="form-label">Plaka</label><input type="text" id="plateInput" className="form-control" value={activeTrip.plate} readOnly /></div>
+                            <div className="col-md-8 mb-3"><label htmlFor="modelInput" className="form-label">Marka / Model</label><input type="text" id="modelInput" className="form-control" value={`${activeTrip.brand} ${activeTrip.model}`} readOnly /></div>
                         </div>
                     </fieldset>
-                    
                     <hr />
-
                     <legend className="h6 mb-3">Teslimat Bilgileri</legend>
-                    <div className="row">
-                        <div className="col-md-6 mb-3">
-                            <label htmlFor="lastKmInput" className="form-label">
-                                Son Kilometre <span className="text-danger">*</span>
-                            </label>
-                            <div className="input-group">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    id="lastKmInput"
-                                    value={lastKm}
-                                    onChange={(e) => setLastKm(e.target.value)}
-                                    placeholder="Örn: 125400"
-                                    required
-                                />
-                                <span className="input-group-text">km</span>
-                            </div>
-                        </div>
+                    
+                    {/* FOTOĞRAF YÜKLEME ALANI (TAMAMEN DEĞİŞTİ) */}
+                    <PhotoUploader photos={photos} setPhotos={setPhotos}></PhotoUploader>
 
-                        <div className="col-md-6 mb-3">
-                            <label htmlFor="lastPhotoInput" className="form-label">
-                                Araç Sonu Fotoğrafı <span className="text-danger">*</span>
-                            </label>
-                            <input
-                                type="file"
-                                className="form-control"
-                                id="lastPhotoInput"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                                
-                            />
-                        </div>
-                    </div>
-
-                    {/* Opsiyonel Açıklama */}
-                    <div className="mb-3">
-                        <label htmlFor="notesTextarea" className="form-label">Notlar (Opsiyonel)</label>
-                        <textarea
-                            className="form-control"
-                            id="notesTextarea"
-                            rows="3"
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Aracın durumu, unutulan eşyalar veya herhangi bir sorun hakkında not bırakabilirsiniz."
-                        ></textarea>
-                    </div>
-
-                    {/* Gönder Butonu */}
+                    {/* Gönder Butonu (Aynı) */}
                     <div className="d-grid mt-4">
                         <button type="submit" className="btn btn-primary btn-lg" disabled={isSubmitting}>
-                            {isSubmitting ? (
-                                <>
-                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    <span className="ms-2">İşleniyor...</span>
-                                </>
-                            ) : (
-                                "Teslimatı Onayla ve Yolculuğu Tamamla"
-                            )}
+                            {isSubmitting ? (<span><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span className="ms-2">İşleniyor...</span></span>) : ("Teslimatı Onayla ve Yolculuğu Tamamla")}
                         </button>
                     </div>
                 </form>

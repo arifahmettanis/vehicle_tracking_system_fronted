@@ -131,6 +131,7 @@ export const TripSlice = createSlice({
 					// Eğer veri aynıysa, hiçbir şey yapma! State referansı değişmez, render tetiklenmez.
 					console.log("API'den gelen veri lokaldeki ile aynı, render tetiklenmeyecek.");
 				}
+				state.loading = false
 
 			
 			})

@@ -7,9 +7,11 @@ function TimeCounter({ time }) {
     useEffect(() => {
         const tripStartTime = new Date(time);
         setElapsedTotalMinutes(differenceInMinutes(new Date(), tripStartTime));
+        setInterval(() => {
+            setElapsedTotalMinutes(differenceInMinutes(new Date(), tripStartTime));
+        },1000)
     }, [time]);
 
-    // Hesaplama mantığı tamamen aynı
     const hours = Math.floor(elapsedTotalMinutes / 60);
     const minutes = elapsedTotalMinutes % 60;
 

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkSession } from './store/UserSlice'
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import { AdminRoute, ModRoute } from './components/AdminRoute'
 import LoginPage from './pages/Login'
 import Main from './pages/Main'
 import NotFoundPage from './pages/NotFoundPage'
@@ -12,7 +11,9 @@ import { fetchActiveTrip } from './store/TripSlice'
 import ActiveTrip from './pages/ActiveTrip'
 import ActiveTripPage from './pages/ActiveTrip'
 import CompleteTripPage from './pages/CompleteTrip'
-
+import ReportIncident from './pages/ReportIncident'
+import AddVehiclePage from './pages/AddVehicle'
+import { AdminRoute, DirectorRoute, ManagerRoute } from './components/GeneralComponents/AdminRoute'
 
 function App() {
 
@@ -46,7 +47,9 @@ function App() {
 					<Route path='/' element={<Main />} />
 					<Route path='/trip/start' element={<StartTripPage />} />
 					<Route path='/trip/active' element={<ActiveTripPage></ActiveTripPage>}></Route>
+					<Route path='/vehicle/create' element={<ManagerRoute><AddVehiclePage></AddVehiclePage></ManagerRoute>}></Route>
 					<Route path='/trip/complete' element={<CompleteTripPage></CompleteTripPage>}></Route>
+					<Route path='/trip/report' element={<ReportIncident></ReportIncident>}></Route>
 					<Route path='*' element={<NotFoundPage />} />
 				</Routes>
 			</div>

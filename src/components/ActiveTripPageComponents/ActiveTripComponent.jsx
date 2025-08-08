@@ -9,7 +9,22 @@ function ActiveTripComponent() {
 
     const dispatch = useDispatch()
     const { activeTrip } = useSelector(store => store.trip)
-    
+    console.log("activeTrip")
+    console.log(activeTrip)
+
+
+
+    const trip = useSelector(store => store.trip);
+
+
+    if (trip.loading) {
+        return <div className='alert alert-warning' >Aktif seyehat bilgisi yükleniyor...</div>;
+    }
+
+    if (!trip.activeTrip) {
+        return <div className='alert alert-danger'>Aktif bir seyehatiniz bulunmamaktadır. <Link to={"/"}> Anasayfaya Dön</Link> </div>;
+    }
+
 
     return (
         <div className="card shadow-lg border-0 rounded-4">
@@ -21,27 +36,26 @@ function ActiveTripComponent() {
                     <div className="card-body">
                         <span className="badge bg-success mb-2">Şu anda bu araçta seyehattesiniz.</span>
                         <h5 className="card-title">{activeTrip.brand + " " + activeTrip.model} - {activeTrip.plate}</h5>
-                        <p className="card-text text-muted mb-1">{activeTrip.owner_name}</p>
                         <div className="d-flex align-items-center mb-2">
                             <i className="bi bi-geo-alt me-2"></i>
                             <span>{activeTrip.destination}</span>
                         </div>
                         <div className="d-flex align-items-center mb-2">
                             <i className="bi bi-calendar me-2"></i>
-                            <span>{format(activeTrip.start_time, 'dd MMMM yyyy EEEE HH:mm', { locale: tr })}</span>
+                            <span>{format(activeTrip.assigned_date, 'dd MMMM yyyy EEEE HH:mm', { locale: tr })}</span>
                         </div>
 
                         <div className="d-flex align-items-center mb-2">
                             <i className="bi bi-clock me-2"></i>
-                            <span><TimeCounter time={activeTrip.start_time} ></TimeCounter></span>
+                            <span><TimeCounter time={activeTrip.assigned_date} ></TimeCounter></span>
                         </div>
-
+                        <div className="mt-2 d-grid">
+                            <a className="btn btn-warning rounded-pill" href={`tel:+905050925863`} >Yetkiliyi Ara : {activeTrip.owner_name}</a>
+                        </div>
+                        <div className="mt-2 d-grid">
+                            <Link className="btn btn-danger rounded-pill" to={"/trip/report"} >Kaza / Arıza Bildir</Link>
+                        </div>
                         <hr />
-                        <div className="d-flex justify-content-between">
-                            <strong>Total</strong>
-                            <span className="text-primary fs-5">$145.80</span>
-                        </div>
-
                         <div className="mt-4 d-grid">
                             <Link className="btn btn-primary btn-lg rounded-pill" to={"/trip/complete"} >Seyehati Bitir</Link>
                         </div>

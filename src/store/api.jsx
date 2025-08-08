@@ -54,6 +54,18 @@ export const getVehicleAPI = (credentials) => {
     });
 };
 
+
+/**
+ * QR Kodu okutulan aracı getirir.
+ * @returns {Promise<object>}
+ */
+export const createVehicleAPI = (credentials) => {
+    return apiClient.post('index.php', {
+        ...credentials,
+        type: 'createVechile'
+    });
+};
+
 /**
  * QR Kodu okutulan aracı getirir.
  * @returns {Promise<object>}
@@ -80,10 +92,10 @@ export const fetchActiveTripAPI = (credentials) => {
  * QR Kodu okutulan aracı getirir.
  * @returns {Promise<object>}
  */
-export const completeTripAPI = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'completeTrip'
+export const completeTripAPI = (formData) => {
+    formData.append('type', 'completeTrip')
+    return apiClient.post('index.php', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
     });
 };
 
@@ -109,6 +121,21 @@ export const addVehicle = (vehicleData) => {
     });
 };
 
+
+/**
+ * Yeni bir kaza/arıza bildirimi yapar.
+ * Fotoğraf içerdiği için FormData bekler.
+ * @param {FormData} formData - Kaza/arıza bilgileri ve fotoğrafı içeren form verisi.
+ * @returns {Promise<object>}
+ */
+export const reportIncidentAPI = (credentials) => {
+
+    return apiClient.post('index.php', {...credentials, type:'reportIndicent'}, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    });
+};
 // ... diğer tüm API çağrıların için buraya fonksiyonlar ekleyebilirsin ...
 // ornek: kazaBildir, aracSil vs.
 

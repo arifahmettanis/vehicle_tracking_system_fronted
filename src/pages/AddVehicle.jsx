@@ -2,26 +2,23 @@ import React from 'react'
 import Header from '../components/GeneralComponents/Header'
 import Sidebar from '../components/GeneralComponents/Sidebar'
 import Footer from '../components/GeneralComponents/Footer'
-import { useSelector } from 'react-redux'
-import { memo } from 'react'
-import ActiveTripComponent from '../components/ActiveTripPageComponents/ActiveTripComponent'
-
-function ActiveTripPage() {
-
-
+import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
+import CreateVehicleComponent from '../components/AddVehicleComponents/AddVehicleComponent'
+function AddVehiclePage() {
     return (
         <>
-
             <Header></Header>
             <Sidebar></Sidebar>
             <main id='main' className='main'>
                 <div className='pagetitle'>
-                    <h1>Aktif Seyehatim</h1>
+                    <h1>Yeni Araç Oluştur</h1>
+                    <nav><ol className='breadcrumb'><li className='breadcrumb-item'><a href='index.html'>Anasayfa</a></li><li className='breadcrumb-item active'>Genel Bakış</li></ol></nav>
                 </div>
                 <section className='section dashboard'>
                     <div className='row'>
                         <div className='col-12'>
-                            <ActiveTripComponent></ActiveTripComponent>
+                            <CreateVehicleComponent></CreateVehicleComponent>
                         </div>
                     </div>
                 </section>
@@ -31,4 +28,4 @@ function ActiveTripPage() {
     )
 }
 
-export default memo(ActiveTripPage)
+export default AddVehiclePage
