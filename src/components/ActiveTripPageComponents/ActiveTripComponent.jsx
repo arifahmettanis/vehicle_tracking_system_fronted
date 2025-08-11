@@ -9,10 +9,6 @@ function ActiveTripComponent() {
 
     const dispatch = useDispatch()
     const { activeTrip } = useSelector(store => store.trip)
-    console.log("activeTrip")
-    console.log(activeTrip)
-
-
 
     const trip = useSelector(store => store.trip);
 
@@ -42,12 +38,12 @@ function ActiveTripComponent() {
                         </div>
                         <div className="d-flex align-items-center mb-2">
                             <i className="bi bi-calendar me-2"></i>
-                            <span>{format(activeTrip.assigned_date, 'dd MMMM yyyy EEEE HH:mm', { locale: tr })}</span>
+                            <span>{format(activeTrip.start_date, 'dd MMMM yyyy EEEE HH:mm', { locale: tr })}</span>
                         </div>
 
                         <div className="d-flex align-items-center mb-2">
                             <i className="bi bi-clock me-2"></i>
-                            <span><TimeCounter time={activeTrip.assigned_date} ></TimeCounter></span>
+                            <span><TimeCounter time={activeTrip.start_date} ></TimeCounter></span>
                         </div>
                         <div className="mt-2 d-grid">
                             <a className="btn btn-warning rounded-pill" href={`tel:+905050925863`} >Yetkiliyi Ara : {activeTrip.owner_name}</a>

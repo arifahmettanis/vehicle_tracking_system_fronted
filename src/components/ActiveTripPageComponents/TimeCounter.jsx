@@ -1,9 +1,8 @@
 import { differenceInMinutes, min } from 'date-fns';
 import { useState, useEffect, memo } from 'react';
 function TimeCounter({ time }) {
-    console.log(time)
     const [elapsedTotalMinutes, setElapsedTotalMinutes] = useState(0);
-
+    
     useEffect(() => {
         const tripStartTime = new Date(time);
         setElapsedTotalMinutes(differenceInMinutes(new Date(), tripStartTime));

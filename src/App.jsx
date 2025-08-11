@@ -14,6 +14,9 @@ import CompleteTripPage from './pages/CompleteTrip'
 import ReportIncident from './pages/ReportIncident'
 import AddVehiclePage from './pages/AddVehicle'
 import { AdminRoute, DirectorRoute, ManagerRoute } from './components/GeneralComponents/AdminRoute'
+import AllVehicles from './pages/AllVehicles'
+import VehicleDetailPage from './pages/VehicleDetailPage'
+import VehicleEditPage from './pages/VehicleEditPage'
 
 function App() {
 
@@ -47,7 +50,10 @@ function App() {
 					<Route path='/' element={<Main />} />
 					<Route path='/trip/start' element={<StartTripPage />} />
 					<Route path='/trip/active' element={<ActiveTripPage></ActiveTripPage>}></Route>
+					<Route path='/vehicles' element={<ManagerRoute><AllVehicles></AllVehicles></ManagerRoute>}></Route>
 					<Route path='/vehicle/create' element={<ManagerRoute><AddVehiclePage></AddVehiclePage></ManagerRoute>}></Route>
+					<Route path='/vehicle/edit/:vehicleId' element={<ManagerRoute><VehicleEditPage></VehicleEditPage></ManagerRoute>}></Route>
+					<Route path='/vehicle/:vehicleId' element={<ManagerRoute><VehicleDetailPage></VehicleDetailPage></ManagerRoute>}></Route>
 					<Route path='/trip/complete' element={<CompleteTripPage></CompleteTripPage>}></Route>
 					<Route path='/trip/report' element={<ReportIncident></ReportIncident>}></Route>
 					<Route path='*' element={<NotFoundPage />} />

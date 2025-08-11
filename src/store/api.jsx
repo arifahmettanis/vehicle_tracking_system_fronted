@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost/server/api/',
+    baseURL: 'http://192.168.1.10/server/api/',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
@@ -54,6 +54,19 @@ export const getVehicleAPI = (credentials) => {
     });
 };
 
+/**
+ * QR Kodu okutulan aracı getirir.
+ * @returns {Promise<object>}
+ */
+export const getAllVehiclesAPI = (credentials) => {
+    return apiClient.post('index.php', {
+        ...credentials,
+        type: 'getAllVehicles'
+    });
+};
+
+
+
 
 /**
  * QR Kodu okutulan aracı getirir.
@@ -62,7 +75,7 @@ export const getVehicleAPI = (credentials) => {
 export const createVehicleAPI = (credentials) => {
     return apiClient.post('index.php', {
         ...credentials,
-        type: 'createVechile'
+        type: 'createVehicle'
     });
 };
 
@@ -130,14 +143,42 @@ export const addVehicle = (vehicleData) => {
  */
 export const reportIncidentAPI = (credentials) => {
 
-    return apiClient.post('index.php', {...credentials, type:'reportIndicent'}, {
+    return apiClient.post('index.php', { ...credentials, type: 'reportIndicent' }, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
     });
 };
-// ... diğer tüm API çağrıların için buraya fonksiyonlar ekleyebilirsin ...
-// ornek: kazaBildir, aracSil vs.
 
-// İstersen doğrudan apiClient'i de export edebilirsin ama fonksiyonlar daha temiz.
-export default apiClient;
+/**
+ * Rol bazlı filtrelenmiş kurum listesini getirir.
+ * @returns {Promise<object>}
+ */
+export const fetchKurumAPI = () => {
+    return apiClient.post('index.php', { type: 'fetchKurum' });
+};
+
+/**
+ * Rol bazlı filtrelenmiş mıntıka listesini getirir.
+ * @returns {Promise<object>}
+ */
+export const fetchMintikaAPI = () => {
+    return apiClient.post('index.php', { type: 'fetchMintika' });
+};
+
+/**
+ * ID ile tek bir araç detayı getirir.
+ * @param {number} vehicleId - Detayı istenen aracın ID'si.
+ * @returns {Promise<object>}
+ */
+export const fetchVehicleByIdAPI = (vehicleId) => {
+    return apiClient.post('index.php', { type: 'getVechile', id: vehicleId });
+};
+
+export const updateVehicleAPI = (vehicleId, vehicleData) => {
+    return apiClient.post('index.php', {
+        ...vehicleData,
+        id: vehicleId,
+        type: 'updateVehicle',
+    });
+};

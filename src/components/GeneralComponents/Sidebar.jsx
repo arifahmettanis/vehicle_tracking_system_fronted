@@ -20,7 +20,7 @@ function Sidebar() {
         <aside id="sidebar" className="sidebar offcanvas-lg offcanvas-start" tabIndex="-1">
             <ul className="sidebar-nav" id="sidebar-nav">
                 <li className="nav-item">
-                    <a className="nav-link" href="#">
+                    <a className="nav-link" href="/">
                         <i className="bi bi-grid"></i>
                         <span>Ana Sayfa</span>
                     </a>
@@ -33,7 +33,7 @@ function Sidebar() {
                     <li className="nav-item">
                         <a className="nav-link collapsed" data-bs-toggle="collapse" href="#araçlar-nav"><i className="bi bi-car-front"></i><span>Araç İşlemleri</span><i className="bi bi-chevron-down ms-auto"></i></a>
                         <ul id="araçlar-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
-                            <li><a href="#"><i className="bi bi-circle"></i><span>Araç Listesi</span></a></li>
+                            <li><Link to="/vehicles"><i className="bi bi-circle"></i><span>Araç Listesi</span></Link></li>
                             <li><Link to="/vehicle/create"><i className="bi bi-circle"></i><span>Yeni Araç Ekle</span></Link></li>
                         </ul>
                     </li>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, memo } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from '../../store/UserSlice'
 import ActiveTripBanner from '../ActiveTripPageComponents/ActiveTripBanner'
+import { Link } from 'react-router-dom'
 
 
 function Header() {
@@ -16,10 +17,10 @@ function Header() {
             <header id="header" className="header fixed-top d-flex flex-column justify-content-center">
                 <div className='d-flex align-items-center' >
                     <div className="d-flex align-items-center justify-content-between">
-                        <a href="index.html" className="logo d-flex align-items-center">
+                        <Link to="/" className="logo d-flex align-items-center">
                             <i className="bi bi-truck-front-fill me-2"></i>
                             <span className="d-none d-lg-block">AraçTakip</span>
-                        </a>
+                        </Link>
                         <i className="bi bi-list toggle-sidebar-btn" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar"></i>
                     </div>
                     <nav className="header-nav ms-auto">
@@ -27,12 +28,22 @@ function Header() {
                             <li className="nav-item dropdown pe-3">
                                 <a className="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                                     <img src="/anonim.webp" alt="Profil" className="rounded-circle" />
-                                    <span className="d-none d-md-block dropdown-toggle ps-2">T. Ünal</span>
+                                    <span className="d-none d-md-block dropdown-toggle ps-2">{user.name}</span>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                    <li className="dropdown-header text-center"><h6>Tuna Ünal</h6><span>Admin</span></li>
-                                    <li><hr className="dropdown-divider" /></li>
-                                    <li><a className="dropdown-item d-flex align-items-center" href="#"><i className="bi bi-person"></i><span>Profilim</span></a></li>
+                                    <li className="dropdown-header text-center">
+                                        <h6>{user.name}</h6>
+                                        <span>{user.role}</span>
+                                    </li>
+                                    <li>
+                                        <hr className="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a className="dropdown-item d-flex align-items-center" href="#">
+                                            <i className="bi bi-person"></i>
+                                            <span>Profilim</span>
+                                        </a>
+                                    </li>
                                     <li><hr className="dropdown-divider" /></li>
                                     <li><a className="dropdown-item d-flex align-items-center" onClick={handleLogout}><i className="bi bi-box-arrow-right"></i><span>Çıkış Yap</span></a></li>
                                 </ul>

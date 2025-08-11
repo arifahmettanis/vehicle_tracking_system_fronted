@@ -1,46 +1,64 @@
+/* 
+TODO : SEÇİLEN MINTIKANIN KURUMLARININ LİSTELENMESİNİ SAĞLA. 
+*/
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { createVehicle } from '../../store/VehicleSlice';
-// import { fetchKurumlar } from '../store/KurumSlice';
-// import { fetchMintikalar } from '../store/MintikaSlice';
+import { fetchKurumlar } from '../../store/KurumSlice';
+import { fetchMintikalar } from '../../store/MintikaSlice';
 
 function CreateVehicleComponent() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // Örnek statik veri (API'dan çekilene kadar)
-    const kurumList = [{id: 1, name: 'Merkez Holding'}, {id: 2, name: 'Anadolu Lojistik A.Ş.'}];
-    const mintikaList = [{id: 1, name: 'Merkez Bölge'}, {id: 2, name: 'Anadolu Yakası Bölgesi'}];
-    
+    const {kurumList} = useSelector(store => store.kurum);
+    const {mintikaList} = useSelector(store => store.mintika);
+
     const { isSubmitting, error } = useSelector(store => store.vehicle);
+    const { user } = useSelector(store => store.user);
 
     const [formData, setFormData] = useState({
         plate: '',
         brand: '',
         model: '',
-        model_year: '', // Yeni alan eklendi
-        type: '',
+        model_year: '',
+        type_: '', //API'daki type parametresi ile karışmaması için, kesinlikle kötü bir kod. Gerçek bir api'a geçince gerek kalmayacak.
         category: '',
         engine_no: '',
         chassis_no: '',
         tax_due_date: '',
-        status: '1', // Varsayılan durum: Aktif (TINYINT(1) için '1')
+        status: '1', 
         kurum_id: '',
         mintika_id: '',
         owner_name: '',
-        registration_info: '', // Yeni alan eklendi
+        owner_phone: '',
+        registration_info: ''
     });
-
     useEffect(() => {
-        // dispatch(fetchKurumlar());
-        // dispatch(fetchMintikalar());
-        
-        /*return () => {
-            dispatch(clearVehicleError());
-        };*/
-    }, [dispatch]);
+        if (user) {
+            if (user.role === 'manager') {
+                dispatch(fetchKurumlar());
+                setFormData(prevData => ({
+                    ...prevData,
+                    kurum_id: user.kurum_id,
+                    mintika_id: user.mintika_id
+                }));
+            } else if (user.role === 'director') {
+                dispatch(fetchKurumlar());
+                dispatch(fetchMintikalar());
+                setFormData(prevData => ({
+                    ...prevData,
+                    mintika_id: user.mintika_id
+                }));
+            } else {
+                dispatch(fetchKurumlar());
+                dispatch(fetchMintikalar());
+            }
+        }
+    }, [dispatch, user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -54,14 +72,14 @@ function CreateVehicleComponent() {
         e.preventDefault();
 
         // Zorunlu alan kontrolü güncellendi
-        if (!formData.plate || !formData.brand || !formData.model_year || !formData.kurum_id || !formData.mintika_id) {
+        if (!formData.plate || !formData.brand || !formData.model_year || !formData.model || !formData.kurum_id || !formData.mintika_id) {
             Swal.fire('Uyarı', 'Plaka, Marka, Model Yılı, Kurum ve Mıntıka alanları zorunludur.', 'warning');
             return;
         }
 
         try {
             await dispatch(createVehicle(formData)).unwrap();
-            
+
             await Swal.fire({
                 icon: 'success',
                 title: 'Başarılı!',
@@ -101,32 +119,66 @@ function CreateVehicleComponent() {
                         <input type="number" className="form-control" id="model_year" name="model_year" placeholder="Örn: 2024" value={formData.model_year} onChange={handleChange} required />
                     </div>
 
-                    {/* Kurum ve Mıntıka Seçimi */}
-                    <div className="col-md-6">
-                        <label htmlFor="kurum_id" className="form-label">Kurum <span className="text-danger">*</span></label>
-                        <select id="kurum_id" name="kurum_id" className="form-select" value={formData.kurum_id} onChange={handleChange} required>
-                            <option value="">Seçiniz...</option>
-                            {kurumList.map(kurum => (<option key={kurum.id} value={kurum.id}>{kurum.name}</option>))}
-                        </select>
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="mintika_id" className="form-label">Mıntıka <span className="text-danger">*</span></label>
-                        <select id="mintika_id" name="mintika_id" className="form-select" value={formData.mintika_id} onChange={handleChange} required>
-                            <option value="">Seçiniz...</option>
-                            {mintikaList.map(mintika => (<option key={mintika.id} value={mintika.id}>{mintika.name}</option>))}
-                        </select>
-                    </div>
-                    
+
+                    {user.role == "admin" && <>
+                        {/* Kurum ve Mıntıka Seçimi */}
+                        <div className="col-md-6">
+                            <label htmlFor="kurum_id" className="form-label">Kurum <span className="text-danger">*</span></label>
+                            <select id="kurum_id" name="kurum_id" className="form-select" value={formData.kurum_id} onChange={handleChange} required>
+                                <option value="">Seçiniz...</option>
+                                {kurumList.map(kurum => (<option key={kurum.id} value={kurum.id}>{kurum.name}</option>))}
+                            </select>
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="mintika_id" className="form-label">Mıntıka <span className="text-danger">*</span></label>
+                            <select id="mintika_id" name="mintika_id" className="form-select" value={formData.mintika_id} onChange={handleChange} required>
+                                <option value="">Seçiniz...</option>
+                                {mintikaList.map(mintika => (<option key={mintika.id} value={mintika.id}>{mintika.name}</option>))}
+                            </select>
+                        </div>
+                    </>}
+
+
+                    {user.role == "director" && <>
+                        {/* Kurum ve Mıntıka Seçimi */}
+                        <div className="col-md-6">
+                            <label htmlFor="kurum_id" className="form-label">Kurum <span className="text-danger">*</span></label>
+                            <select id="kurum_id" name="kurum_id" className="form-select" value={formData.kurum_id} onChange={handleChange} required>
+                                <option value="">Seçiniz...</option>
+                                {kurumList.map(kurum => (<option key={kurum.id} value={kurum.id}>{kurum.name}</option>))}
+                            </select>
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="mintika_id" className="form-label">Mıntıka <span className="text-danger">*</span></label>
+                            <input type="text" className="form-control" id="mintika_id" name="mintika_id" value={user.mintika_name} readOnly disabled />
+
+                        </div>
+                    </>}
+
+                    {user.role == "manager" && <>
+                        {/* Kurum ve Mıntıka Seçimi */}
+                        <div className="col-md-6">
+                            <label htmlFor="kurum_id" className="form-label">Kurum <span className="text-danger">*</span></label>
+                            <input type="text" className="form-control" id="kurum_id" name="kurum_id" value={user.kurum_name} readOnly disabled />
+                            {() => set}
+
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="mintika_id" className="form-label">Mıntıka <span className="text-danger">*</span></label>
+                            <input type="text" className="form-control" id="mintika_id" name="mintika_id" value={user.mintika_name} readOnly disabled />
+                        </div>
+                    </>}
+
                     {/* Detay Bilgiler */}
                     <div className="col-md-6">
                         <label htmlFor="type" className="form-label">Tip</label>
-                        <input type="text" className="form-control" id="type" name="type" placeholder="Örn: SEDAN, HATCHBACK" value={formData.type} onChange={handleChange} />
+                        <input type="text" className="form-control" id="type_" name="type_" placeholder="Örn: SEDAN, HATCHBACK" value={formData.type} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
                         <label htmlFor="category" className="form-label">Kategori</label>
                         <input type="text" className="form-control" id="category" name="category" placeholder="Örn: OTOMOBİL (AA SEDAN)" value={formData.category} onChange={handleChange} />
                     </div>
-                    
+
                     {/* Ruhsat Bilgileri */}
                     <div className="col-md-6">
                         <label htmlFor="engine_no" className="form-label">Motor No</label>
@@ -136,11 +188,15 @@ function CreateVehicleComponent() {
                         <label htmlFor="chassis_no" className="form-label">Şasi No</label>
                         <input type="text" className="form-control" id="chassis_no" name="chassis_no" value={formData.chassis_no} onChange={handleChange} />
                     </div>
-                    
+
                     {/* Diğer Bilgiler */}
                     <div className="col-md-6">
                         <label htmlFor="owner_name" className="form-label">Sahip Adı</label>
                         <input type="text" className="form-control" id="owner_name" name="owner_name" value={formData.owner_name} onChange={handleChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="owner_name" className="form-label">Sahip Telefon Numarası</label>
+                        <input type="text" className="form-control" id="owner_phone" name="owner_phone" placeholder={"+905555555555"} value={formData.owner_phone} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
                         <label htmlFor="tax_due_date" className="form-label">Vergi Bitiş Tarihi</label>
