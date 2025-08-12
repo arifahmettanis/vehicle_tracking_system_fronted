@@ -1,4 +1,4 @@
-# Son Güncelleme 11.08.2025
+# Son Güncelleme 12.08.2025
 ## 🛠️ Yetkililerin için
 
 - **Araç Listeleme:** 
