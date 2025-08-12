@@ -182,3 +182,11 @@ export const updateVehicleAPI = (vehicleId, vehicleData) => {
         type: 'updateVehicle',
     });
 };
+
+/**
+ * Rol bazlı filtrelenmiş mıntıka listesini getirir.
+ * @returns {Promise<object>}
+ */
+export const fetchOldTripsAPI = (vehicleId) => {
+    return apiClient.post('index.php', { vehicleId:vehicleId, type: 'fetchOldTrips' });
+};

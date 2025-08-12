@@ -45,5 +45,5 @@ export function ManagerRoute({ children }) {
 export function ManagerControl() {
     const { user } = useSelector(state => state.user);
     if (!user) return false;
-    return user.role == 'manager' || user.role == 'director' || user.role == 'admin'
+    return user.role == 'manager' || user.role == 'director' || user.role == 'admin' ? true : false
 }

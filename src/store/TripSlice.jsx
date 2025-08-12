@@ -1,34 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { startTripAPI, fetchActiveTripAPI, completeTripAPI } from './api';
+import { startTripAPI, fetchActiveTripAPI, completeTripAPI, fetchOldTripsAPI } from './api';
 
 const initialState = {
-	/**
-	 * Şu anda aktif olarak devam eden yolculuğu tutar.
-	 * Eğer aktif bir yolculuk yoksa bu değer 'null' olacaktır.
-	 * UI'da "if (activeTrip) { ... }" gibi kontrollerle bir yolculuğun
-	 * devam edip etmediğini kolayca anlayabiliriz.
-	 * Örnek Değer: { tripId: 'xyz-123', vehicleId: 'veh-456', destination: '...', startTime: '...' }
-	 */
+
 	activeTrip: localStorage.getItem('currentTrip') ? JSON.parse(localStorage.getItem('currentTrip')) : null,
-
-	/**
-	 * Kullanıcının tamamlanmış veya iptal edilmiş tüm geçmiş yolculuklarını
-	 * bir dizi içinde tutar. "Yolculuklarım" gibi bir sayfa için kullanılır.
-	 */
 	tripHistory: [],
-
-	/**
-	 * Genel bir yüklenme durumu. Genellikle veri "çekme" işlemleri
-	 * (GET requestleri) için kullanılır. Örneğin, yolculuk geçmişini çekerken
-	 * bir sayfa yükleme göstergesi (loader) göstermek için idealdir.
-	 */
 	loading: false,
-
-	/**
-	 * Herhangi bir API isteği başarısız olduğunda hata mesajını tutar.
-	 * Eğer bir hata yoksa bu değer 'null' olacaktır. UI'da hata mesajlarını
-	 * göstermek için kullanılır.
-	 */
 	error: null,
 }
 
@@ -83,6 +60,24 @@ export const completeTrip = createAsyncThunk('trip/complete', async (credentials
 	}
 });
 
+export const getTripHistory = createAsyncThunk('trip/fetchAll', async (vehicleId, { rejectWithValue }) => {
+	try {
+		const response = await fetchOldTripsAPI(vehicleId);
+		if (response.data.success) {
+			return response.data;
+		} else {
+			return rejectWithValue(response.data);
+		}
+	} catch (error) {
+		if (error.response && error.response.data) {
+			return rejectWithValue(error.response.data);
+		} else {
+			return rejectWithValue({ error: 'Beklenmedik bir hata oluştu. Seyehat bitirilemedi' });
+		}
+	}
+});
+
+
 
 
 export const TripSlice = createSlice({
@@ -133,7 +128,7 @@ export const TripSlice = createSlice({
 				}
 				state.loading = false
 
-			
+
 			})
 			.addCase(fetchActiveTrip.rejected, (state, action) => {
 				state.loading = false;
@@ -156,6 +151,20 @@ export const TripSlice = createSlice({
 				state.loading = false;
 				state.activeTrip = null;
 				state.error = action.payload?.error || 'Aktif trip sonlandırılamadı';
+			});
+		builder
+			.addCase(getTripHistory.pending, (state, action) => {
+				state.loading = true;
+			})
+			.addCase(getTripHistory.fulfilled, (state, action) => {
+				state.loading = false;
+				state.tripHistory = action.payload.data;
+				state.error = null;
+			})
+			.addCase(getTripHistory.rejected, (state, action) => {
+				state.loading = false;
+				state.tripHistory = [];
+				state.error = action.payload?.error || 'Trip geçmişi alınamadı.';
 			});
 
 	}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import {ManagerRoute} from "./AdminRoute"
+import {ManagerControl} from "./AdminRoute"
 function Sidebar() {
 
     const { user } = useSelector(state => state.user)
@@ -26,9 +26,8 @@ function Sidebar() {
                     </a>
                 </li>
 
-                <ManagerRoute>
-
-
+                {ManagerControl() && <>
+                
                     <li className="nav-heading">Yönetim</li>
                     <li className="nav-item">
                         <a className="nav-link collapsed" data-bs-toggle="collapse" href="#araçlar-nav"><i className="bi bi-car-front"></i><span>Araç İşlemleri</span><i className="bi bi-chevron-down ms-auto"></i></a>
@@ -39,7 +38,7 @@ function Sidebar() {
                     </li>
                     <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-people"></i><span>Kullanıcılar</span></a></li>
                     <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-building"></i><span>Kurum/Mıntıka</span></a></li>
-                </ManagerRoute>
+                </>}
                 <li className="nav-heading">Raporlar</li>
                 <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-clipboard-data"></i><span>Faaliyet Raporu</span></a></li>
                 <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-shield-check"></i><span>Denetim Logları</span></a></li>

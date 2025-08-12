@@ -2,22 +2,26 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchVehicleById, clearSelectedVehicle } from '../../store/VehicleSlice';
-
+import { getTripHistory } from '../../store/TripSlice';
 
 function VehicleDetailComponent({ vehicleId }) {
     const dispatch = useDispatch();
 
     const { selectedVehicle: vehicle, loading, error } = useSelector(state => state.vehicle);
+    const { tripHistory } = useSelector(store => store.trip)
+
     useEffect(() => {
         console.log(vehicleId)
         if (vehicleId) {
             dispatch(fetchVehicleById(vehicleId));
+            dispatch(getTripHistory(vehicleId))
         }
 
         return () => {
             dispatch(clearSelectedVehicle());
         };
     }, [dispatch, vehicleId]);
+    console.log(tripHistory)
 
     if (loading) {
         return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}><div className="spinner-border" role="status"></div></div>;
@@ -58,12 +62,12 @@ function VehicleDetailComponent({ vehicleId }) {
                     </div>
 
                     {/* Sekmeli Detaylar */}
-                    <div className="card mt-3">
+                    <div className="card mt-3 mb-3">
                         <div className="card-body">
                             <ul className="nav nav-tabs nav-tabs-bordered pt-3">
                                 <li className="nav-item"><button className="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Genel Bakış</button></li>
                                 <li className="nav-item"><button className="nav-link" data-bs-toggle="tab" data-bs-target="#technical">Teknik Bilgiler</button></li>
-                                <li className="nav-item"><button className="nav-link" data-bs-toggle="tab" data-bs-target="#history">Geçmiş</button></li>
+                                <li className="nav-item"><button className="nav-link" data-bs-toggle="tab" data-bs-target="#history">Kaza & Bakım Geçmişi</button></li>
                             </ul>
                             <div className="tab-content pt-2">
                                 <div className="tab-pane fade show active" id="overview">
@@ -100,8 +104,28 @@ function VehicleDetailComponent({ vehicleId }) {
                             <div className="list-group">
                                 <Link to={`/trips/start?vehicleId=${vehicle.id}`} className="list-group-item list-group-item-action"><i className="bi bi-play-circle me-2"></i>Seyehat Başlat</Link>
                                 <Link to={`/vehicles/edit/${vehicle.id}`} className="list-group-item list-group-item-action"><i className="bi bi-pencil me-2"></i>Araç Bilgilerini Düzenle</Link>
+                                <Link to={``} className="list-group-item list-group-item-action text-warning"><i className="bi bi-tools me-2"></i>Aracı Bakıma Al</Link>
+                                <Link to={``} className="list-group-item list-group-item-action text-danger"><i className="bi bi-ban me-2"></i>Aracı Kullanıma Kapat</Link>
                                 <Link to={`/incident/report/${vehicle.id}`} className="list-group-item list-group-item-action text-danger"><i className="bi bi-exclamation-octagon me-2"></i>Kaza/Arıza Bildir</Link>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Geçmiş Seyehatler Kartı */}
+                    <div className="card mt-3">
+                        <div className="card-body">
+                            <h5 className="card-title d-flex justify-content-between align-items-center"><span>Geçmiş Seyehatler</span><button className='btn btn-sm btn-primary'>Tümünü Gör</button></h5>
+                            <table className="table">
+                                <tbody>
+                                    {tripHistory.map((trip, i) => (
+                                        <tr key={i}>
+                                            <td>{trip.name}</td>
+                                            <td>{trip.destination}</td>
+                                        </tr>
+                                        )
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
