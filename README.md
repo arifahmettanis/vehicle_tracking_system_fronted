@@ -6,8 +6,9 @@
 - **Araç Düzenleme**
 - Bu sayfaların optimizasyonu henüz yapılmadı, yani hatalar, rolller arası sızıntı (yetkisiz işlem) veya çakışmalar olabilir. Şuan sadece temeli atıldı.
 
-
-
+# TODO List
+- **Değişken isimleri netleştirilecek**
+- **Restful API mimarisi kullanılacak**
 
 # Araç Takip Sistemi - Frontend Projesi
 
