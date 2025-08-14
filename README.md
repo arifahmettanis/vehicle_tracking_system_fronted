@@ -1,4 +1,10 @@
 # Son Güncelleme 12.08.2025
+## 🛠️ Toplantı Notlarım
+- **ASK:  Aracın Durumları ne olacak? Bakıma Al/Kullanıma Kapat vs.**
+- **INFO: Seyehat geçmişini filtrelenebilir şekilde tutuyorum. Admin mıntıkaları, mıntıka da kurumları filtreleyebilecek.**
+- **TODO: Seyehat geçmişininde her seyehatin yanında detaya git butonu olacak. Seyehat detayda ise tüm bilgiler ve fotoğraflar gözükecek.**
+- **TODO: Seyehat geçmişininde her seyehatin yanında detaya git butonu olacak. Seyehat detayda ise tüm bilgiler ve fotoğraflar gözükecek.**
+
 ## 🛠️ Yetkililerin için
 
 - **Araç Listeleme:** 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://192.168.1.10/server/api/',
+    baseURL: 'http://192.168.1.12/server/api/',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
@@ -189,4 +189,8 @@ export const updateVehicleAPI = (vehicleId, vehicleData) => {
  */
 export const fetchOldTripsAPI = (vehicleId) => {
     return apiClient.post('index.php', { vehicleId:vehicleId, type: 'fetchOldTrips' });
+};
+
+export const getTripHistoryAPI = (filters) => {
+    return apiClient.post('index.php', { type: 'getTripHistory', ...filters });
 };

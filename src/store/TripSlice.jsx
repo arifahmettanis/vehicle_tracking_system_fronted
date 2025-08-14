@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { startTripAPI, fetchActiveTripAPI, completeTripAPI, fetchOldTripsAPI } from './api';
+import { startTripAPI, fetchActiveTripAPI, completeTripAPI, fetchOldTripsAPI , getTripHistoryAPI} from './api';
 
 const initialState = {
 
@@ -77,6 +77,23 @@ export const getTripHistory = createAsyncThunk('trip/fetchAll', async (vehicleId
 	}
 });
 
+
+export const fetchTripHistory = createAsyncThunk(
+	'trip/fetchHistory',
+	// Thunk'a filtre objesi gönderilecek
+	async (filters = {}, { rejectWithValue }) => {
+		try {
+			const response = await getTripHistoryAPI(filters);
+			if (response.data.success) {
+				return response.data.data;
+			} else {
+				return rejectWithValue(response.data);
+			}
+		} catch (error) {
+			return rejectWithValue(error.response?.data || { message: 'Geçmiş getirilemedi.' });
+		}
+	}
+);
 
 
 
@@ -165,6 +182,20 @@ export const TripSlice = createSlice({
 				state.loading = false;
 				state.tripHistory = [];
 				state.error = action.payload?.error || 'Trip geçmişi alınamadı.';
+			});
+
+		// ... extraReducers içine ekleyin
+		builder
+			.addCase(fetchTripHistory.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(fetchTripHistory.fulfilled, (state, action) => {
+				state.loading = false;
+				state.tripHistory = action.payload;
+			})
+			.addCase(fetchTripHistory.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload.message;
 			});
 
 	}
