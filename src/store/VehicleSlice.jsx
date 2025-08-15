@@ -4,6 +4,7 @@ import { createVehicleAPI, getVehicleAPI, getAllVehiclesAPI, fetchVehicleByIdAPI
 const initialState = {
 	selectedVehicle: localStorage.getItem('selected_vechile') ? JSON.parse(localStorage.getItem('selected_vechile')) : null,
 	allVehicles: [],
+	vehicleList: [], // üstteki ile aynı, düzenlenecek
 	loading: '',
 	error: ""
 }
@@ -49,7 +50,7 @@ export const getAllVehicles = createAsyncThunk(
 		try {
 			const response = await getAllVehiclesAPI();
 			if (response.data.success) {
-				return response.data.data; // Sadece araç dizisini döndür
+				return response.data.data;
 			} else {
 				return rejectWithValue(response.data);
 			}
@@ -58,6 +59,13 @@ export const getAllVehicles = createAsyncThunk(
 		}
 	}
 );
+
+export const fetchVehicleList = createAsyncThunk('vehicles/fetchList', async (_, { rejectWithValue }) => {
+	try {
+		const response = await getAllVehiclesAPI();
+		return response.data.data;
+	} catch (error) { /*...*/ }
+});
 
 export const fetchVehicleById = createAsyncThunk('vehicles/fetchById', async (vehicleId, { rejectWithValue }) => {
 	try {
@@ -158,6 +166,11 @@ export const VehicleSlice = createSlice({
 			.addCase(updateVehicle.rejected, (state, action) => {
 				state.isSubmitting = false;
 				state.error = action.payload.message || 'Bir hata oluştu.';
+			});
+
+		builder
+			.addCase(fetchVehicleList.fulfilled, (state, action) => {
+				state.vehicleList = action.payload;
 			});
 
 	}

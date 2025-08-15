@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios"
-import { controlUser, loginUser, logoutUser } from './api';
+import { controlUser, loginUser, logoutUser, getUserListAPI } from './api';
 const initialState = {
+	userList: [],
 	status: !!localStorage.getItem('user'),
 	user: !!localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
 	error: ""
@@ -66,6 +67,12 @@ export const checkSession = createAsyncThunk('user/checkSession', async (credent
 }
 );
 
+export const fetchUserList = createAsyncThunk('user/fetchList', async (_, { rejectWithValue }) => {
+	try {
+		const response = await getUserListAPI();
+		return response.data.data;
+	} catch (error) { /*...*/ }
+});
 
 
 export const UserSlice = createSlice({
@@ -123,6 +130,10 @@ export const UserSlice = createSlice({
 			localStorage.removeItem('user')
 			console.log("user silindi")
 		})
+		builder
+			.addCase(fetchUserList.fulfilled, (state, action) => {
+				state.userList = action.payload;
+			});
 	}
 })
 

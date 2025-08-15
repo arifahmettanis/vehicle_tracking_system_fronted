@@ -188,9 +188,15 @@ export const updateVehicleAPI = (vehicleId, vehicleData) => {
  * @returns {Promise<object>}
  */
 export const fetchOldTripsAPI = (vehicleId) => {
-    return apiClient.post('index.php', { vehicleId:vehicleId, type: 'fetchOldTrips' });
+    return apiClient.post('index.php', { vehicleId: vehicleId, type: 'fetchOldTrips' });
 };
 
 export const getTripHistoryAPI = (filters) => {
     return apiClient.post('index.php', { type: 'getTripHistory', ...filters });
+};
+
+export const getVehicleListAPI = () => apiClient.post('index.php', { type: 'getVehicleList' });
+export const getUserListAPI = () => apiClient.post('index.php', { type: 'getUserList' });
+export const assignTripAPI = (tripData) => {
+    return apiClient.post('index.php', { type: 'assignTrip', ...tripData });
 };

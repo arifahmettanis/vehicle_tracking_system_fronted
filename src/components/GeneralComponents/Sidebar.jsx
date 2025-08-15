@@ -36,11 +36,11 @@ function Sidebar() {
                             <li><Link to="/vehicle/create"><i className="bi bi-circle"></i><span>Yeni Araç Ekle</span></Link></li>
                         </ul>
                     </li>
+                    <li className="nav-item"><Link className="nav-link collapsed" to="/trip/history"><i className="bi bi-clipboard-data"></i><span>Seyehat Geçmişleri</span></Link></li>
+                    <li className="nav-item"><Link className="nav-link collapsed" to="/trip/assign"><i className="bi bi-shield-check"></i><span>Araç Ata</span></Link></li>
                     <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-people"></i><span>Kullanıcılar</span></a></li>
                     <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-building"></i><span>Kurum/Mıntıka</span></a></li>
                     <li className="nav-heading">Raporlar</li>
-                    <li className="nav-item"><Link className="nav-link collapsed" to="/trip/history"><i className="bi bi-clipboard-data"></i><span>Seyehat Geçmişleri</span></Link></li>
-                    <li className="nav-item"><a className="nav-link collapsed" href="#"><i className="bi bi-shield-check"></i><span>Denetim Logları</span></a></li>
                 </>}
 
             </ul>

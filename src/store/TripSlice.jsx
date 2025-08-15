@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { startTripAPI, fetchActiveTripAPI, completeTripAPI, fetchOldTripsAPI , getTripHistoryAPI} from './api';
+import { startTripAPI, fetchActiveTripAPI, completeTripAPI, fetchOldTripsAPI , getTripHistoryAPI, assignTripAPI} from './api';
 
 const initialState = {
 
@@ -80,7 +80,6 @@ export const getTripHistory = createAsyncThunk('trip/fetchAll', async (vehicleId
 
 export const fetchTripHistory = createAsyncThunk(
 	'trip/fetchHistory',
-	// Thunk'a filtre objesi gönderilecek
 	async (filters = {}, { rejectWithValue }) => {
 		try {
 			const response = await getTripHistoryAPI(filters);
@@ -95,6 +94,21 @@ export const fetchTripHistory = createAsyncThunk(
 	}
 );
 
+export const assignTrip = createAsyncThunk(
+    'trip/assign',
+    async (tripData, { rejectWithValue }) => {
+        try {
+            const response = await assignTripAPI(tripData);
+            if (response.data.success) {
+                return response.data;
+            } else {
+                return rejectWithValue(response.data);
+            }
+        } catch (error) {
+            return rejectWithValue(error.response?.data || { message: 'Yolculuk atanamadı.' });
+        }
+    }
+);
 
 
 export const TripSlice = createSlice({

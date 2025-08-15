@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 export default function LoginPage() {
 
-	const [username, setUsername] = useState('ariftanis')
-	const [password, setPassword] = useState('3334')
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
 
 	const user = useSelector((store) => store.user)
 	const dispatch = useDispatch()
@@ -56,6 +56,15 @@ export default function LoginPage() {
 					<section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
 						<div className="container">
 							<div className="row justify-content-center">
+								<h3>Hıslı Giriş (Geliştirme Ortamı)</h3>
+								<div className="alert alert-primary d-flex justify-content-between">
+									<button className='btn btn-warning' onClick={()=>{setUsername("ariftanis");setPassword('3334');handleLogin}}>Ahmet Arif Tanış</button>
+									<button className='btn btn-warning' onClick={()=>{setUsername("emreonay");setPassword('313');handleLogin}}>Emre Onay</button>
+									<button className='btn btn-warning' onClick={()=>{setUsername("IBRAHIMTEMIZKAN");setPassword('313');handleLogin}}>İbrahim Temizkan</button>
+									<button className='btn btn-warning' onClick={()=>{setUsername("tunaunal");setPassword('1');handleLogin}}>Arif Tuna Ünal</button>
+
+
+								</div>
 								<div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 									<div className="card mb-3">
 										<div className="card-body">
