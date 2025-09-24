@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://192.168.1.12/server/api/',
-    withCredentials: true,
-    headers: {
-        'Content-Type': 'application/json',
-    }
+  baseURL: 'http://localhost/server/api/',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 // 2. Projeye özel API çağrılarını fonksiyon olarak tanımla.
@@ -17,10 +17,10 @@ const apiClient = axios.create({
  * @returns {Promise<object>}
  */
 export const loginUser = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'login'
-    });
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'login',
+  });
 };
 
 /**
@@ -28,9 +28,9 @@ export const loginUser = (credentials) => {
  * @returns {Promise<object>}
  */
 export const logoutUser = () => {
-    return apiClient.post('index.php', {
-        type: 'logout'
-    });
+  return apiClient.post('index.php', {
+    type: 'logout',
+  });
 };
 
 /**
@@ -38,9 +38,9 @@ export const logoutUser = () => {
  * @returns {Promise<object>}
  */
 export const controlUser = () => {
-    return apiClient.post('index.php', {
-        type: 'checkSession'
-    });
+  return apiClient.post('index.php', {
+    type: 'checkSession',
+  });
 };
 
 /**
@@ -48,10 +48,10 @@ export const controlUser = () => {
  * @returns {Promise<object>}
  */
 export const getVehicleAPI = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'getVechile'
-    });
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'getVechile',
+  });
 };
 
 /**
@@ -59,24 +59,21 @@ export const getVehicleAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const getAllVehiclesAPI = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'getAllVehicles'
-    });
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'getAllVehicles',
+  });
 };
-
-
-
 
 /**
  * QR Kodu okutulan aracı getirir.
  * @returns {Promise<object>}
  */
 export const createVehicleAPI = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'createVehicle'
-    });
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'createVehicle',
+  });
 };
 
 /**
@@ -84,10 +81,10 @@ export const createVehicleAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const startTripAPI = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'startTrip'
-    });
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'startTrip',
+  });
 };
 
 /**
@@ -95,10 +92,10 @@ export const startTripAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const fetchActiveTripAPI = (credentials) => {
-    return apiClient.post('index.php', {
-        ...credentials,
-        type: 'activeTrip'
-    });
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'activeTrip',
+  });
 };
 
 /**
@@ -106,10 +103,10 @@ export const fetchActiveTripAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const completeTripAPI = (formData) => {
-    formData.append('type', 'completeTrip')
-    return apiClient.post('index.php', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
+  formData.append('type', 'completeTrip');
+  return apiClient.post('index.php', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
 /**
@@ -117,9 +114,9 @@ export const completeTripAPI = (formData) => {
  * @returns {Promise<object>}
  */
 export const fetchVehicles = () => {
-    return apiClient.post('index.php', {
-        type: 'aracListele'
-    });
+  return apiClient.post('index.php', {
+    type: 'aracListele',
+  });
 };
 
 /**
@@ -128,12 +125,11 @@ export const fetchVehicles = () => {
  * @returns {Promise<object>}
  */
 export const addVehicle = (vehicleData) => {
-    return apiClient.post('index.php', {
-        ...vehicleData,
-        type: 'aracEkle'
-    });
+  return apiClient.post('index.php', {
+    ...vehicleData,
+    type: 'aracEkle',
+  });
 };
-
 
 /**
  * Yeni bir kaza/arıza bildirimi yapar.
@@ -142,12 +138,15 @@ export const addVehicle = (vehicleData) => {
  * @returns {Promise<object>}
  */
 export const reportIncidentAPI = (credentials) => {
-
-    return apiClient.post('index.php', { ...credentials, type: 'reportIndicent' }, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    });
+  return apiClient.post(
+    'index.php',
+    { ...credentials, type: 'reportIndicent' },
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
 };
 
 /**
@@ -155,7 +154,7 @@ export const reportIncidentAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const fetchKurumAPI = () => {
-    return apiClient.post('index.php', { type: 'fetchKurum' });
+  return apiClient.post('index.php', { type: 'fetchKurum' });
 };
 
 /**
@@ -163,7 +162,7 @@ export const fetchKurumAPI = () => {
  * @returns {Promise<object>}
  */
 export const fetchMintikaAPI = () => {
-    return apiClient.post('index.php', { type: 'fetchMintika' });
+  return apiClient.post('index.php', { type: 'fetchMintika' });
 };
 
 /**
@@ -172,15 +171,15 @@ export const fetchMintikaAPI = () => {
  * @returns {Promise<object>}
  */
 export const fetchVehicleByIdAPI = (vehicleId) => {
-    return apiClient.post('index.php', { type: 'getVechile', id: vehicleId });
+  return apiClient.post('index.php', { type: 'getVechile', id: vehicleId });
 };
 
 export const updateVehicleAPI = (vehicleId, vehicleData) => {
-    return apiClient.post('index.php', {
-        ...vehicleData,
-        id: vehicleId,
-        type: 'updateVehicle',
-    });
+  return apiClient.post('index.php', {
+    ...vehicleData,
+    id: vehicleId,
+    type: 'updateVehicle',
+  });
 };
 
 /**
@@ -188,15 +187,94 @@ export const updateVehicleAPI = (vehicleId, vehicleData) => {
  * @returns {Promise<object>}
  */
 export const fetchOldTripsAPI = (vehicleId) => {
-    return apiClient.post('index.php', { vehicleId: vehicleId, type: 'fetchOldTrips' });
+  return apiClient.post('index.php', { vehicleId: vehicleId, type: 'fetchOldTrips' });
 };
 
 export const getTripHistoryAPI = (filters) => {
-    return apiClient.post('index.php', { type: 'getTripHistory', ...filters });
+  return apiClient.post('index.php', { type: 'getTripHistory', ...filters });
 };
 
 export const getVehicleListAPI = () => apiClient.post('index.php', { type: 'getVehicleList' });
 export const getUserListAPI = () => apiClient.post('index.php', { type: 'getUserList' });
+export const getUserByIdAPI = (id) => apiClient.post('index.php', { type: 'getUserById', id: id });
 export const assignTripAPI = (tripData) => {
-    return apiClient.post('index.php', { type: 'assignTrip', ...tripData });
+  return apiClient.post('index.php', { type: 'assignTrip', ...tripData });
+};
+export const createUserAPI = (userData) => {
+  return apiClient.post('index.php', { type: 'createUser', ...userData });
+};
+export const updateUserAPI = (userId, userData) => {
+  return apiClient.post('index.php', { type: 'updateUser', id: userId, ...userData });
+};
+
+/**
+ * Tüm mıntıkaların listesini getirir. Sadece Admin erişebilir.
+ * @returns {Promise<object>}
+ */
+export const getAllMintikasAPI = () => {
+  return apiClient.post('index.php', { type: 'getAllMintikas' });
+};
+
+/**
+ * ID ile tek bir mıntıkanın detayını getirir. Sadece Admin erişebilir.
+ * @param {number|string} id - Detayı istenen mıntıkanın ID'si.
+ * @returns {Promise<object>}
+ */
+export const getMintikaByIdAPI = (id) => {
+  return apiClient.post('index.php', { type: 'getMintikaById', id });
+};
+
+/**
+ * Yeni bir mıntıka oluşturur. Sadece Admin erişebilir.
+ * @param {object} data - { name, responsible_name, responsible_phone }
+ * @returns {Promise<object>}
+ */
+export const createMintikaAPI = (data) => {
+  return apiClient.post('index.php', { type: 'createMintika', ...data });
+};
+
+/**
+ * Mevcut bir mıntıkayı günceller. Sadece Admin erişebilir.
+ * @param {number|string} id - Güncellenecek mıntıkanın ID'si.
+ * @param {object} data - { name, responsible_name, responsible_phone }
+ * @returns {Promise<object>}
+ */
+export const updateMintikaAPI = (id, data) => {
+  return apiClient.post('index.php', { type: 'updateMintika', id, ...data });
+};
+
+/**
+ * Tüm mıntıkaların listesini getirir. Sadece Admin erişebilir.
+ * @returns {Promise<object>}
+ */
+export const getAllKurumsAPI = () => {
+  return apiClient.post('index.php', { type: 'getAllKurums' });
+};
+
+/**
+ * ID ile tek bir kurumun detayını getirir. Sadece Admin erişebilir.
+ * @param {number|string} id - Detayı istenen kurumun ID'si.
+ * @returns {Promise<object>}
+ */
+export const getKurumByIdAPI = (id) => {
+  return apiClient.post('index.php', { type: 'getKurumById', id });
+};
+
+/**
+ * Yeni bir kurum oluşturur. Sadece Admin erişebilir.
+ * @param {object} data - { name, responsible_name, responsible_phone }
+ * @returns {Promise<object>}
+ */
+export const createKurumAPI = (data) => {
+  return apiClient.post('index.php', { type: 'createKurum', ...data });
+};
+
+/**
+ * Mevcut bir kurum günceller. Sadece Admin erişebilir.
+ * @param {number|string} id - Güncellenecek mıntıkanın ID'si.
+ * @param {object} data - { name, responsible_name, responsible_phone }
+ * @returns {Promise<object>}
+ */
+export const updateKurumAPI = (id, data) => {
+  return apiClient.post('index.php', { type: 'updateKurum', id, ...data });
 };

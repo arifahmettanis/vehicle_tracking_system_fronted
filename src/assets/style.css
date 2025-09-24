@@ -11,7 +11,7 @@ body {
     background-color: #f0f2f5;
     /* Sabit header (60px) için üstten boşluk */
     margin-top: var(--header-height);
-    
+
     /* DİNAMİK */
 }
 
@@ -190,15 +190,63 @@ main#main {
 
 .main,
 .sidebar {
-  transition: margin-top 0.4s ease, top 0.4s ease;
+    transition: margin-top 0.4s ease, top 0.4s ease;
 }
 
 body.has-banner .main {
-  margin-top: 130px;
+    margin-top: 130px;
 }
 
 @media (min-width: 992px) {
-  body.has-banner .sidebar {
-    top: 130px;
-  }
+    body.has-banner .sidebar {
+        top: 130px;
+    }
+}
+
+
+.card-info {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 16px;
+    text-align: left;
+}
+
+.card-info-header {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.card-info-header span {
+    color: #2a68ff;
+    font-weight: 600;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f0f5ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon i {
+    width: 24px;
+    height: 24px;
+    stroke: #2a68ff;
+}
+
+.value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.increase {
+    color: #28a745;
+    font-size: 14px;
 }

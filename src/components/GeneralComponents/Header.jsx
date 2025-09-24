@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react'
+import React, { memo } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from '../../store/UserSlice'
 import ActiveTripBanner from '../ActiveTripPageComponents/ActiveTripBanner'
@@ -33,19 +33,10 @@ function Header() {
                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                     <li className="dropdown-header text-center">
                                         <h6>{user.name}</h6>
-                                        <span>{user.role}</span>
-                                    </li>
-                                    <li>
-                                        <hr className="dropdown-divider" />
-                                    </li>
-                                    <li>
-                                        <a className="dropdown-item d-flex align-items-center" href="#">
-                                            <i className="bi bi-person"></i>
-                                            <span>Profilim</span>
-                                        </a>
+                                        <span>{user.role_name}</span>
                                     </li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><a className="dropdown-item d-flex align-items-center" onClick={handleLogout}><i className="bi bi-box-arrow-right"></i><span>Çıkış Yap</span></a></li>
+                                    <li><button className="dropdown-item d-flex align-items-center" onClick={handleLogout}><i className="bi bi-box-arrow-right"></i><span className='mx-2'>Çıkış Yap</span></button></li>
                                 </ul>
                             </li>
                         </ul>

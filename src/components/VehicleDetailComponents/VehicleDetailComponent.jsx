@@ -2,19 +2,19 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchVehicleById, clearSelectedVehicle } from '../../store/VehicleSlice';
-import { getTripHistory } from '../../store/TripSlice';
+import { fetchTripHistory } from '../../store/TripSlice';
 
 function VehicleDetailComponent({ vehicleId }) {
     const dispatch = useDispatch();
 
     const { selectedVehicle: vehicle, loading, error } = useSelector(state => state.vehicle);
     const { tripHistory } = useSelector(store => store.trip)
-
+    console.log(tripHistory)
     useEffect(() => {
         console.log(vehicleId)
         if (vehicleId) {
             dispatch(fetchVehicleById(vehicleId));
-            dispatch(getTripHistory(vehicleId))
+            dispatch(fetchTripHistory({vehicleId:vehicleId}))
         }
 
         return () => {
@@ -119,8 +119,8 @@ function VehicleDetailComponent({ vehicleId }) {
                                 <tbody>
                                     {tripHistory.map((trip, i) => (
                                         <tr key={i}>
-                                            <td>{trip.name}</td>
-                                            <td>{trip.destination}</td>
+                                            <td>{trip.user_name}</td>
+                                            <td>{trip.destination || "Bilgi yok"}</td>
                                         </tr>
                                         )
                                     )}

@@ -1,21 +1,7 @@
-# Son Güncelleme 12.08.2025
+# Son Güncelleme 17.08.2025
 ## 🛠️ Toplantı Notlarım
-- **ASK:  Aracın Durumları ne olacak? Bakıma Al/Kullanıma Kapat vs.**
-- **ASK : Anasayfada ne olacak?**
-- **INFO: Seyehat geçmişini filtrelenebilir şekilde tutuyorum. Admin mıntıkaları, mıntıka da kurumları filtreleyebilecek.**
+- **Soru: Adminlerin aktif seyehatleri görüntüleyebilecekleri bir ekran? Yönetici o an hangi araba kimde görebilir.**
 - **TODO: Seyehat geçmişininde her seyehatin yanında detaya git butonu olacak. Seyehat detayda ise tüm bilgiler ve fotoğraflar gözükecek.**
-- **TODO: Seyehat geçmişininde her seyehatin yanında detaya git butonu olacak. Seyehat detayda ise tüm bilgiler ve fotoğraflar gözükecek.**
-
-## 🛠️ Yetkililerin için
-
-- **Araç Listeleme:** 
-- **Araç Oluşturma:**
-- **Araç Düzenleme**
-- Bu sayfaların optimizasyonu henüz yapılmadı, yani hatalar, rolller arası sızıntı (yetkisiz işlem) veya çakışmalar olabilir. Şuan sadece temeli atıldı.
-
-# TODO List
-- **Değişken isimleri netleştirilecek**
-- **Restful API mimarisi kullanılacak**
 
 # Araç Takip Sistemi - Frontend Projesi
 
