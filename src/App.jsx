@@ -11,25 +11,34 @@ import { fetchActiveTrip } from './store/TripSlice';
 import ActiveTripPage from './pages/ActiveTrip';
 import CompleteTripPage from './pages/CompleteTrip';
 import ReportIncident from './pages/ReportIncident';
-import AddVehiclePage from './pages/AddVehicle';
 import { AdminRoute, DirectorRoute, ManagerRoute } from './components/GeneralComponents/AdminRoute';
-import AllVehicles from './pages/AllVehicles';
-import VehicleDetailPage from './pages/VehicleDetailPage';
-import VehicleEditPage from './pages/VehicleEditPage';
 import TripHistory from './pages/TripHistory';
 import AssignTrip from './pages/AssignTrip';
+
+//! Mıntıka Yönetimi
 import MintikaListPage from './pages/Mintika/MintikaListPage';
 import MintikaDetailPage from './pages/Mintika/MintikaDetailPage';
 import CreateMintikaPage from './pages/Mintika/CreateMintikaPage';
 import EditMintikaPage from './pages/Mintika/EditMintikaPage';
+
+//! Kurum Yönetimi
 import KurumListPage from './pages/Kurum/KurumListPage';
 import KurumDetailPage from './pages/Kurum/KurumDetailPage';
 import CreateKurumPage from './pages/Kurum/CreateKurumPage';
 import EditKurumPage from './pages/Kurum/EditKurumPage';
+
+//! Kullanıcı Yönetimi
 import UserListPage from './pages/User/UserListPage';
 import UserDetailPage from './pages/User/UserDetailPage';
 import CreateUserPage from './pages/User/CreateUserPage';
 import EditUserPage from './pages/User/EditUserPage';
+
+//! Araç Yönetimi
+import VehicleListPage from './pages/Vehicle/VehicleListPage';
+import VehicleDetailPage from './pages/Vehicle/VehicleDetailPage';
+import CreateVehiclePage from './pages/Vehicle/CreateVehiclePage';
+import EditVehiclePage from './pages/Vehicle/EditVehiclePage';
+
 function App() {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -58,10 +67,18 @@ function App() {
           <Route path="/trip/report" element={<ReportIncident></ReportIncident>}></Route>
           {/* ONLY MANAGER */}
           <Route
-            path="/vehicles"
+            path="/vehicle/list"
             element={
               <ManagerRoute>
-                <AllVehicles></AllVehicles>
+                <VehicleListPage></VehicleListPage>
+              </ManagerRoute>
+            }
+          ></Route>
+          <Route
+            path="/vehicle/:vehicleID"
+            element={
+              <ManagerRoute>
+                <VehicleDetailPage></VehicleDetailPage>
               </ManagerRoute>
             }
           ></Route>
@@ -69,23 +86,15 @@ function App() {
             path="/vehicle/create"
             element={
               <ManagerRoute>
-                <AddVehiclePage></AddVehiclePage>
+                <CreateVehiclePage></CreateVehiclePage>
               </ManagerRoute>
             }
           ></Route>
           <Route
-            path="/vehicle/edit/:vehicleId"
+            path="/vehicle/edit/:vehicleID"
             element={
               <ManagerRoute>
-                <VehicleEditPage></VehicleEditPage>
-              </ManagerRoute>
-            }
-          ></Route>
-          <Route
-            path="/vehicle/:vehicleId"
-            element={
-              <ManagerRoute>
-                <VehicleDetailPage></VehicleDetailPage>
+                <EditVehiclePage></EditVehiclePage>
               </ManagerRoute>
             }
           ></Route>

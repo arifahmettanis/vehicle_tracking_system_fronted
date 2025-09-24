@@ -20,16 +20,9 @@ function Sidebar() {
             <>
               <li className="nav-heading">Yönetim</li>
               <li className="nav-item">
-                <Link className="nav-link collapsed" to="/vehicles">
+                <Link className="nav-link collapsed" to="/vehicle/list">
                   <i className="bi bi-car-front"></i>
                   <span>Araç Listesi</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                {' '}
-                <Link className="nav-link collapsed" to="/vehicle/create">
-                  <i className="bi bi-plus-circle"></i>
-                  <span>Yeni Araç Ekle</span>
                 </Link>
               </li>
               <li className="nav-item">
