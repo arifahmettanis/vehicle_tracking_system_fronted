@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchMintikaById, clearSelectedMintika } from '../../store/MintikaSlice';
+import { min } from 'date-fns';
 
 function MintikaDetailComponent({ mintikaID }) {
   const dispatch = useDispatch();
@@ -13,7 +14,6 @@ function MintikaDetailComponent({ mintikaID }) {
       dispatch(clearSelectedMintika());
     };
   }, [dispatch, mintikaID]);
-
   if (loading || !mintika) return <p>Yükleniyor...</p>;
 
   return (

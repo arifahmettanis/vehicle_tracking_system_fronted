@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import KurumDetailComponent from '../../components/KurumComps/KurumDetailComponent';
 import { useParams } from 'react-router-dom';
 export default function KurumDetailPage() {
-  const { kurumId } = useParams();
+  const { kurumID } = useParams();
   return (
     <>
       <Header></Header>
@@ -25,7 +25,7 @@ export default function KurumDetailPage() {
           </nav>
         </div>
         <section className="section dashboard">
-          <KurumDetailComponent kurumId={kurumId}></KurumDetailComponent>
+          <KurumDetailComponent kurumID={kurumID}></KurumDetailComponent>
         </section>
       </main>
       <Footer></Footer>

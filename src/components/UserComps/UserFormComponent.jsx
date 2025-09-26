@@ -7,8 +7,6 @@ import { fetchKurumlar } from '../../store/KurumSlice';
 import { fetchMintikalar } from '../../store/MintikaSlice';
 import { AdminControl, DirectorControl } from '../GeneralComponents/AdminRoute';
 function UserFormComponent({ userID }) {
-  console.log('userID');
-  console.log(userID);
   // Düzenleme modunda ID'yi prop olarak alır
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,6 +65,16 @@ function UserFormComponent({ userID }) {
         kurum_id: selectedUser.kurum_id,
         mintika_id: selectedUser.mintika_id,
         phone: selectedUser.phone,
+      });
+    }
+    if (!isAdmin) {
+      setFormData((prev) => {
+        return { ...prev, mintika_id: currentUser.mintika_id };
+      });
+    }
+    if (!isAdmin && !isDirector) {
+      setFormData((prev) => {
+        return { ...prev, mintika_id: currentUser.mintika_id, kurum_id: currentUser.kurum_id };
       });
     }
   }, [selectedUser, isEditMode]);
@@ -148,7 +156,7 @@ function UserFormComponent({ userID }) {
         {formData && ( // Sadece formData yüklendiğinde formu göster
           <form onSubmit={handleSubmit} className="row g-3">
             {/* Mıntıka Seçimi - Admin ve Director için */}
-            {(!isEditMode || (isEditMode && currentUser.role === 'admin')) && (
+            {isAdmin && (
               <div className="col-md-6">
                 <label htmlFor="mintika_id" className="form-label">
                   Mıntıka <span className="text-danger">*</span>
@@ -159,7 +167,6 @@ function UserFormComponent({ userID }) {
                   className="form-select"
                   value={formData.mintika_id}
                   onChange={handleChange}
-                  disabled={currentUser.role === 'Mıntıka Yöneticisi'}
                   required
                 >
                   <option value="">Seçiniz...</option>
@@ -173,7 +180,7 @@ function UserFormComponent({ userID }) {
             )}
 
             {/* Kurum Seçimi - Admin, Director ve Manager için */}
-            {(isEditMode || (!isEditMode && (isAdmin || isDirector))) && (
+            {isDirector && (
               <div className="col-md-6">
                 <label htmlFor="kurum_id" className="form-label">
                   Kurum <span className="text-danger">*</span>
@@ -192,9 +199,6 @@ function UserFormComponent({ userID }) {
                   <option value="">
                     {formData.mintika_id ? 'Seçiniz...' : 'Önce Mıntıka Seçin'}
                   </option>
-                  {/* Düzenleme modunda ise sadece ilgili kurum gösterilir, ama mevcut yapıya göre hepsi */}
-                  {/* FilteredKurumList'i burada kullanabilirsiniz */}
-                  {/* TODO: Düzenleme modunda sadece kendi kurumunu gösterme mantığı */}
                   {(!isEditMode || (isEditMode && formData.mintika_id)) &&
                     (isAdmin || isDirector
                       ? filteredKurumList.map((k) => (
@@ -202,10 +206,7 @@ function UserFormComponent({ userID }) {
                             {k.name}
                           </option>
                         ))
-                      : // Eğer Manager ise ve ID'si biliniyorsa, sadece kendi kurumunu göster
-                        // Bu mantık biraz karmaşıklaşır, daha basit bir yaklaşım gerekebilir
-                        // Şimdilik listeyi boş bırakıyorum, gerekli ise düzeltilir
-                        kurumList.map((k) => (
+                      : kurumList.map((k) => (
                           <option key={k.id} value={k.id}>
                             {k.name}
                           </option>
@@ -213,8 +214,8 @@ function UserFormComponent({ userID }) {
                 </select>
               </div>
             )}
-
             <hr className="col-12" />
+
             <div className="col-md-6">
               <label htmlFor="name" className="form-label">
                 İsim Soyisim <span className="text-danger">*</span>

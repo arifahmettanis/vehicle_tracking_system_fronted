@@ -8,6 +8,7 @@ import KurumListComponent from '../../components/KurumComps/KurumListComponent';
 import Breadcrumb from '../../components/GeneralComponents/BreadCrumb';
 
 export default function KurumListPage() {
+  console.log('first');
   return (
     <>
       <Header></Header>

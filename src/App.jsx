@@ -151,73 +151,20 @@ function App() {
               </ManagerRoute>
             }
           ></Route>
+          <Route element={<AdminRoute />}>
+            <Route path="/mintika/list" element={<MintikaListPage />} />
+            <Route path="/mintika/:mintikaID" element={<MintikaDetailPage />} />
+            <Route path="/mintika/create" element={<CreateMintikaPage />} />
+            <Route path="/mintika/edit/:mintikaId" element={<EditMintikaPage />} />
+          </Route>
 
-          <Route
-            path="/mintika/list"
-            element={
-              <AdminRoute>
-                <MintikaListPage />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/mintika/:mintikaId"
-            element={
-              <AdminRoute>
-                <MintikaDetailPage />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/mintika/create"
-            element={
-              <AdminRoute>
-                <CreateMintikaPage />
-              </AdminRoute>
-            }
-          />
+          <Route element={<DirectorRoute />}>
+            <Route path="/kurum/list" element={<KurumListPage />} />
+            <Route path="/kurum/:kurumID" element={<KurumDetailPage />} />
+            <Route path="/kurum/create" element={<CreateKurumPage />} />
+            <Route path="/kurum/edit/:kurumID" element={<EditKurumPage />} />
+          </Route>
 
-          <Route
-            path="/mintika/edit/:mintikaId"
-            element={
-              <AdminRoute>
-                <EditMintikaPage />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/kurum/list"
-            element={
-              <AdminRoute>
-                <KurumListPage />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/kurum/:kurumId"
-            element={
-              <AdminRoute>
-                <KurumDetailPage />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/kurum/create"
-            element={
-              <AdminRoute>
-                <CreateKurumPage />
-              </AdminRoute>
-            }
-          />
-
-          <Route
-            path="/kurum/edit/:kurumID"
-            element={
-              <AdminRoute>
-                <EditKurumPage />
-              </AdminRoute>
-            }
-          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

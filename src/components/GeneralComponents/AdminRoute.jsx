@@ -1,42 +1,46 @@
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 export function AdminRoute({ children }) {
   const { user } = useSelector((state) => state.user);
   if (!user) return <p>Yükleniyor…</p>;
-  if (user.role !== 'admin') {
+  if (user.role !== 'Admin') {
     return <Navigate to="/" replace />;
   }
-  return children;
+  return <Outlet />;
 }
 
 export function AdminControl() {
   const { user } = useSelector((state) => state.user);
   if (!user) return false;
-  return user.role == 'admin' ? true : false;
+  return user.role == 'Admin' ? true : false;
 }
 
 //! Mıntıka yöneticisi yetki alanı
 export function DirectorRoute({ children }) {
   const { user } = useSelector((state) => state.user);
   if (!user) return <p>Yükleniyor…</p>;
-  if (user.role !== 'director' && user.role !== 'admin') {
+  if (user.role !== 'Mıntıka Yöneticisi' && user.role !== 'Admin') {
     return <Navigate to="/" replace />;
   }
-  return children;
+  return <Outlet />;
 }
 
 export function DirectorControl() {
   const { user } = useSelector((state) => state.user);
   if (!user) return false;
-  return user.role == 'director' || user.role == 'admin';
+  return user.role == 'Mıntıka Yöneticisi' || user.role == 'Admin';
 }
 
 //! Kurum yöneticisi yetki alanı
 export function ManagerRoute({ children }) {
   const { user } = useSelector((state) => state.user);
   if (!user) return <p>Yükleniyor…</p>;
-  if (user.role !== 'manager' && user.role !== 'director' && user.role !== 'admin') {
+  if (
+    user.role !== 'Kurum Yöneticisi' &&
+    user.role !== 'Mıntıka Yöneticisi' &&
+    user.role !== 'Admin'
+  ) {
     return <Navigate to="/" replace />;
   }
   return children;
@@ -45,5 +49,9 @@ export function ManagerRoute({ children }) {
 export function ManagerControl() {
   const { user } = useSelector((state) => state.user);
   if (!user) return false;
-  return user.role == 'manager' || user.role == 'director' || user.role == 'admin' ? true : false;
+  return user.role == 'Kurum Yöneticisi' ||
+    user.role == 'Mıntıka Yöneticisi' ||
+    user.role == 'Admin'
+    ? true
+    : false;
 }

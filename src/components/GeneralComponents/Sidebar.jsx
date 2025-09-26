@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ManagerControl } from './AdminRoute'; // Bu component'in yolunun doğru olduğunu varsayıyorum
+import { AdminControl, DirectorControl, ManagerControl } from './AdminRoute'; // Bu component'in yolunun doğru olduğunu varsayıyorum
 
 function Sidebar() {
   return (
@@ -18,23 +18,25 @@ function Sidebar() {
           </li>
           {ManagerControl() && (
             <>
-              <li className="nav-heading">Yönetim</li>
+              <li className="nav-heading">İŞLEMLER</li>
               <li className="nav-item">
-                <Link className="nav-link collapsed" to="/vehicle/list">
-                  <i className="bi bi-car-front"></i>
-                  <span>Araç Listesi</span>
+                <Link className="nav-link collapsed" to="/trip/assign">
+                  <i className="bi bi-signpost"></i>
+                  <span>Araç Ata</span>
                 </Link>
               </li>
+              <li className="nav-heading">RAPORLAR</li>
               <li className="nav-item">
                 <Link className="nav-link collapsed" to="/trip/history">
                   <i className="bi bi-clipboard-data"></i>
                   <span>Seyehat Geçmişleri</span>
                 </Link>
               </li>
+              <li className="nav-heading">YÖNETİM</li>
               <li className="nav-item">
-                <Link className="nav-link collapsed" to="/trip/assign">
-                  <i className="bi bi-signpost"></i>
-                  <span>Araç Ata</span>
+                <Link className="nav-link collapsed" to="/vehicle/list">
+                  <i className="bi bi-car-front"></i>
+                  <span>Araçlar</span>
                 </Link>
               </li>
               <li className="nav-item">
@@ -43,18 +45,22 @@ function Sidebar() {
                   <span>Kullanıcılar</span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link collapsed" to="/mintika/list">
-                  <i className="bi bi-building"></i>
-                  <span>Mıntıkalar</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link collapsed" to="/kurum/list">
-                  <i className="bi bi-building"></i>
-                  <span>Kurumlar</span>
-                </Link>
-              </li>
+              {DirectorControl() && (
+                <li className="nav-item">
+                  <Link className="nav-link collapsed" to="/kurum/list">
+                    <i className="bi bi-building"></i>
+                    <span>Kurumlar</span>
+                  </Link>
+                </li>
+              )}
+              {AdminControl() && (
+                <li className="nav-item">
+                  <Link className="nav-link collapsed" to="/mintika/list">
+                    <i className="bi bi-building"></i>
+                    <span>Mıntıkalar</span>
+                  </Link>
+                </li>
+              )}
               <li className="nav-heading">Raporlar</li>
             </>
           )}

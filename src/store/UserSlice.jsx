@@ -1,7 +1,7 @@
 // TODO : USER Slice, Auth Slice ve User Slice olarak 2ye ayrılacak.
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
+import axios from 'axios';
 import {
   controlUser,
   loginUser,
@@ -154,6 +154,10 @@ export const UserSlice = createSlice({
         state.error = null;
         localStorage.setItem('user', JSON.stringify(action.payload.data));
         console.log(action.payload.data);
+        axios.defaults.headers.common['Authorization'] =
+          `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`;
+        console.log('token kaydedildi');
+        console.log(JSON.parse(localStorage.getItem('user') || '{}')?.token || '');
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -164,17 +168,18 @@ export const UserSlice = createSlice({
         localStorage.removeItem('user');
       });
 
-    builder
+    /*builder
       .addCase(checkSession.fulfilled, (state, action) => {
         state.loading = false;
       })
       .addCase(checkSession.rejected, (state, action) => {
         state.status = false;
         state.user = {};
+        alert('Oturum süresi dolmuş veya geçersiz.');
         state.error = 'Oturum süresi dolmuş veya geçersiz.';
         localStorage.removeItem('user');
       });
-
+*/
     builder.addCase(logout.fulfilled, (state) => {
       state.status = false;
       state.user = {};

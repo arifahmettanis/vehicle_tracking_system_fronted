@@ -1,11 +1,9 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.1.165:3000/api/',
+  baseURL: 'http://localhost/server/api/',
   withCredentials: true,
   headers: {
-    Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`, // genelde "Bearer <token>" formatında
-
     'Content-Type': 'application/json',
   },
 });
@@ -19,8 +17,9 @@ const apiClient = axios.create({
  * @returns {Promise<object>}
  */
 export const loginUser = (credentials) => {
-  return apiClient.post('auth/login', {
+  return apiClient.post('index.php', {
     ...credentials,
+    type: 'login',
   });
 };
 
@@ -39,10 +38,9 @@ export const logoutUser = () => {
  * @returns {Promise<object>}
  */
 export const controlUser = () => {
-  return {
-    success: true,
-    message: 'Oturum geçerli',
-  };
+  return apiClient.post('index.php', {
+    type: 'checkSession',
+  });
 };
 
 /**
@@ -60,14 +58,22 @@ export const getVehicleAPI = (credentials) => {
  * QR Kodu okutulan aracı getirir.
  * @returns {Promise<object>}
  */
-export const getAllVehiclesAPI = (credentials) => apiClient.get('vehicles');
+export const getAllVehiclesAPI = (credentials) => {
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'getAllVehicles',
+  });
+};
 
 /**
  * QR Kodu okutulan aracı getirir.
  * @returns {Promise<object>}
  */
 export const createVehicleAPI = (credentials) => {
-  return apiClient.post('/vehicles', credentials);
+  return apiClient.post('index.php', {
+    ...credentials,
+    type: 'createVehicle',
+  });
 };
 
 /**
@@ -114,6 +120,18 @@ export const fetchVehicles = () => {
 };
 
 /**
+ * Yeni bir araç ekler.
+ * @param {object} vehicleData - Eklenecek aracın bilgileri
+ * @returns {Promise<object>}
+ */
+export const addVehicle = (vehicleData) => {
+  return apiClient.post('index.php', {
+    ...vehicleData,
+    type: 'aracEkle',
+  });
+};
+
+/**
  * Yeni bir kaza/arıza bildirimi yapar.
  * Fotoğraf içerdiği için FormData bekler.
  * @param {FormData} formData - Kaza/arıza bilgileri ve fotoğrafı içeren form verisi.
@@ -136,7 +154,7 @@ export const reportIncidentAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const fetchKurumAPI = () => {
-  return apiClient.get('kurumlar', {});
+  return apiClient.post('index.php', { type: 'fetchKurum' });
 };
 
 /**
@@ -145,6 +163,23 @@ export const fetchKurumAPI = () => {
  */
 export const fetchMintikaAPI = () => {
   return apiClient.post('index.php', { type: 'fetchMintika' });
+};
+
+/**
+ * ID ile tek bir araç detayı getirir.
+ * @param {number} vehicleId - Detayı istenen aracın ID'si.
+ * @returns {Promise<object>}
+ */
+export const fetchVehicleByIdAPI = (vehicleId) => {
+  return apiClient.post('index.php', { type: 'getVechile', id: vehicleId });
+};
+
+export const updateVehicleAPI = (vehicleId, vehicleData) => {
+  return apiClient.post('index.php', {
+    ...vehicleData,
+    id: vehicleId,
+    type: 'updateVehicle',
+  });
 };
 
 /**
@@ -159,66 +194,25 @@ export const getTripHistoryAPI = (filters) => {
   return apiClient.post('index.php', { type: 'getTripHistory', ...filters });
 };
 
+export const getVehicleListAPI = () => apiClient.post('index.php', { type: 'getVehicleList' });
+export const getUserListAPI = () => apiClient.post('index.php', { type: 'getUserList' });
+export const getUserByIdAPI = (id) => apiClient.post('index.php', { type: 'getUserById', id: id });
 export const assignTripAPI = (tripData) => {
   return apiClient.post('index.php', { type: 'assignTrip', ...tripData });
 };
-
-/**
- *
- * Araç İşlemleri
- *
- *
- *
- */
-
-export const getVehicleListAPI = () => apiClient.get('vehicles', {});
-/**
- * ID ile tek bir araç detayı getirir.
- * @param {number} vehicleId - Detayı istenen aracın ID'si.
- * @returns {Promise<object>}
- */
-export const fetchVehicleByIdAPI = (vehicleId) => apiClient.get('vehicles/' + vehicleId, {});
-
-/**
- * Yeni bir araç ekler.
- * @param {object} vehicleData - Eklenecek aracın bilgileri
- * @returns {Promise<object>}
- */
-export const addVehicle = (vehicleData) => apiClient.post('vehicles/', { ...vehicleData });
-
-export const updateVehicleAPI = (vehicleId, vehicleData) =>
-  apiClient.put('vehicles/' + vehicleId, vehicleData);
-
-/**
- *
- *
- * Kullanıcı İşlemleri
- *
- *
- */
-
-export const getUserListAPI = () => apiClient.get('users', {});
-export const getUserByIdAPI = (id) => apiClient.get('users/' + id, {});
 export const createUserAPI = (userData) => {
-  return apiClient.post('users/register', { ...userData });
+  return apiClient.post('index.php', { type: 'createUser', ...userData });
 };
 export const updateUserAPI = (userId, userData) => {
-  return apiClient.put('/users/' + userId, { ...userData });
+  return apiClient.post('index.php', { type: 'updateUser', id: userId, ...userData });
 };
-
-/**
- *
- * Mıntıka İşlemleri
- *
- *
- */
 
 /**
  * Tüm mıntıkaların listesini getirir. Sadece Admin erişebilir.
  * @returns {Promise<object>}
  */
 export const getAllMintikasAPI = () => {
-  return apiClient.get('mintikalar', {});
+  return apiClient.post('index.php', { type: 'getAllMintikas' });
 };
 
 /**
@@ -227,7 +221,7 @@ export const getAllMintikasAPI = () => {
  * @returns {Promise<object>}
  */
 export const getMintikaByIdAPI = (id) => {
-  return apiClient.get('mintikalar/' + id, {});
+  return apiClient.post('index.php', { type: 'getMintikaById', id });
 };
 
 /**
@@ -236,7 +230,7 @@ export const getMintikaByIdAPI = (id) => {
  * @returns {Promise<object>}
  */
 export const createMintikaAPI = (data) => {
-  return apiClient.post('mintikalar', { ...data });
+  return apiClient.post('index.php', { type: 'createMintika', ...data });
 };
 
 /**
@@ -246,16 +240,8 @@ export const createMintikaAPI = (data) => {
  * @returns {Promise<object>}
  */
 export const updateMintikaAPI = (id, data) => {
-  return apiClient.put('mintikalar/' + id, { ...data });
+  return apiClient.post('index.php', { type: 'updateMintika', id, ...data });
 };
-
-/**
- *
- *
- * KURUM İŞLEMLERİ
- *
- *
- */
 
 /**
  * Tüm mıntıkaların listesini getirir. Sadece Admin erişebilir.
@@ -271,7 +257,7 @@ export const getAllKurumsAPI = () => {
  * @returns {Promise<object>}
  */
 export const getKurumByIdAPI = (id) => {
-  return apiClient.get('kurumlar/' + id, {});
+  return apiClient.post('index.php', { type: 'getKurumById', id });
 };
 
 /**
@@ -280,7 +266,7 @@ export const getKurumByIdAPI = (id) => {
  * @returns {Promise<object>}
  */
 export const createKurumAPI = (data) => {
-  return apiClient.post('kurumlar', { ...data });
+  return apiClient.post('index.php', { type: 'createKurum', ...data });
 };
 
 /**
@@ -290,5 +276,5 @@ export const createKurumAPI = (data) => {
  * @returns {Promise<object>}
  */
 export const updateKurumAPI = (id, data) => {
-  return apiClient.put('kurumlar/' + id, { ...data });
+  return apiClient.post('index.php', { type: 'updateKurum', id, ...data });
 };

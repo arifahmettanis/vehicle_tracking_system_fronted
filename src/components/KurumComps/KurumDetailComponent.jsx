@@ -3,18 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchKurumById, clearSelectedKurum } from '../../store/KurumSlice';
 
-export default function KurumDetailComponent({ kurumId }) {
+export default function KurumDetailComponent({ kurumID }) {
   const dispatch = useDispatch();
   const { selectedKurum: kurum, loading } = useSelector((state) => state.kurum);
-  console.log(kurumId);
+  console.log(kurumID);
   console.log(kurum);
   console.log(loading);
   useEffect(() => {
-    dispatch(fetchKurumById(kurumId));
+    dispatch(fetchKurumById(kurumID));
     return () => {
       dispatch(clearSelectedKurum());
     };
-  }, [dispatch, kurumId]);
+  }, [dispatch, kurumID]);
 
   if (loading || !kurum) return <p>Yükleniyor...</p>;
 
@@ -34,6 +34,10 @@ export default function KurumDetailComponent({ kurumId }) {
         <div className="row">
           <div className="col-lg-3 fw-bold">Kurum Adı</div>
           <div className="col-lg-9">{kurum.name}</div>
+        </div>
+        <div className="row">
+          <div className="col-lg-3 fw-bold">Mıntıkası</div>
+          <div className="col-lg-9">{kurum.mintika_name}</div>
         </div>
         <div className="row">
           <div className="col-lg-3 fw-bold">Sorumlu Adı</div>

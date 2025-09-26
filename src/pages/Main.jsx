@@ -34,20 +34,20 @@ function Main() {
               </div>
               <div className="row mt-3">
                 <div className="col-xxl-4 col-md-6">
-                  <div class="card-info">
-                    <div class="card-info-header">
+                  <div className="card-info">
+                    <div className="card-info-header">
                       <span>Sales</span> | Today
                     </div>
                     <div className="card-info-body d-flex ">
-                      <div class="icon">
+                      <div className="icon">
                         <i
                           className="bi bi-car-front"
                           style={{ fontSize: '24px', color: '#2a68ff' }}
                         ></i>
                       </div>
-                      <div class="value">145</div>
+                      <div className="value">145</div>
                     </div>
-                    <div class="increase">12% increase</div>
+                    <div className="increase">12% increase</div>
                   </div>
                 </div>
                 <div className="col-xxl-4 col-md-6">

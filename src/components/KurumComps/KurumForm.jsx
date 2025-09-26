@@ -8,14 +8,17 @@ import {
   fetchKurumById,
   clearSelectedKurum,
 } from '../../store/KurumSlice';
-
-export default function KurumForm({ kurumID, merhaba }) {
+import { fetchMintikalar } from '../../store/MintikaSlice';
+import { AdminControl } from '../GeneralComponents/AdminRoute';
+export default function KurumForm({ kurumID }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAdmin = AdminControl();
+  const { user } = useSelector((store) => store.user);
   const { selectedKurum, isSubmitting } = useSelector((state) => state.kurum);
-  console.log(kurumID);
-  console.log(merhaba);
+  const { mintikaList } = useSelector((state) => state.mintika);
   const [formData, setFormData] = useState({
+    mintika_id: 0,
     name: '',
     responsible_name: '',
     responsible_phone: '',
@@ -23,8 +26,14 @@ export default function KurumForm({ kurumID, merhaba }) {
   const isEditMode = !!kurumID;
 
   useEffect(() => {
+    dispatch(fetchMintikalar());
     if (isEditMode) {
       dispatch(fetchKurumById(kurumID));
+    }
+    if (!isAdmin) {
+      setFormData((data) => {
+        return { ...data, mintika_id: user.mintika_id };
+      });
     }
     return () => {
       if (isEditMode) dispatch(clearSelectedKurum());
@@ -33,7 +42,6 @@ export default function KurumForm({ kurumID, merhaba }) {
 
   useEffect(() => {
     if (isEditMode && selectedKurum) {
-      console.log(selectedKurum);
       setFormData(selectedKurum);
     }
   }, [selectedKurum, isEditMode]);
@@ -66,7 +74,30 @@ export default function KurumForm({ kurumID, merhaba }) {
           {isEditMode ? 'Kurum Bilgilerini Düzenle' : 'Yeni Kurum Bilgileri'}
         </h5>
         <form className="row g-3" onSubmit={handleSubmit}>
-          <div className="col-12">
+          {isAdmin && (
+            <div className="col-md-6">
+              <label htmlFor="mintika_id" className="form-label">
+                Mıntıka <span className="text-danger">*</span>
+              </label>
+              <select
+                id="mintika_id"
+                name="mintika_id"
+                className="form-select"
+                value={formData.mintika_id}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Mıntıka Seçiniz...</option>
+                {mintikaList.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="col-md-6">
             <label htmlFor="name" className="form-label">
               Kurum Adı <span className="text-danger">*</span>
             </label>

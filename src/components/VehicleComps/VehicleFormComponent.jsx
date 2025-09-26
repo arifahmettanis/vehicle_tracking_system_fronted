@@ -24,6 +24,8 @@ export default function VehicleFormComponent({ vehicleID }) {
   // Redux'tan gerekli state'leri al
   const { selectedVehicle, isSubmitting, error } = useSelector((state) => state.vehicle);
   const { kurumList } = useSelector((state) => state.kurum);
+  console.log('kurumList');
+  console.log(kurumList);
   const { mintikaList } = useSelector((state) => state.mintika);
 
   // Form state'i, ilk araç verisi geldiğinde veya yeni ekleme modunda boş olacak
@@ -127,7 +129,10 @@ export default function VehicleFormComponent({ vehicleID }) {
 
   // Rolleri tanımla (backend'e gönderilecek şekilde)
   const roles = ['Admin', 'Mıntıka Yöneticisi', 'Kurum Yöneticisi', 'Kullanıcı'];
-
+  const filteredKurumList = formData.mintika_id
+    ? kurumList.filter((k) => k.mintika_id == formData.mintika_id)
+    : [];
+  console.log(typeof formData.mintika_id);
   // Yükleme veya veri gelmediyse gösterilecek UI
   // Düzenleme modunda veri gelmediyse de yükleniyor varsay
   /*if (loading || (!isEditMode && !formData) || (isEditMode && !formData)) {
@@ -207,7 +212,6 @@ export default function VehicleFormComponent({ vehicleID }) {
               required
             />
           </div>
-
           {/* Kurum ve Mıntıka Seçimi - Rol Bazlı */}
           {/* Admin: Hem Mıntıka hem Kurum seçebilir */}
           {isAdmin && (
@@ -221,8 +225,6 @@ export default function VehicleFormComponent({ vehicleID }) {
                 className="form-select"
                 value={formData.mintika_id || ''} // Boş geldiğinde veya seçim yoksa '' kullan
                 onChange={handleChange}
-                // Director rolü mıntıka seçemez, sadece görür
-                disabled={isDirector && !isEditMode}
                 required
               >
                 <option value="">Seçiniz...</option>
@@ -234,10 +236,6 @@ export default function VehicleFormComponent({ vehicleID }) {
               </select>
             </div>
           )}
-
-          {/**
-     * 
-
           <div className="col-md-6">
             <label htmlFor="kurum_id" className="form-label">
               Kurum <span className="text-danger">*</span>
@@ -265,13 +263,7 @@ export default function VehicleFormComponent({ vehicleID }) {
                 ))}
             </select>
           </div>
-
-               * 
-     * 
-     * 
-     */}
-          {/* Mıntıka seçildiyse veya düzenleme modunda ID varsa, filtrelenmiş kurumları göster */}
-
+          *{/* Mıntıka seçildiyse veya düzenleme modunda ID varsa, filtrelenmiş kurumları göster */}
           <hr className="col-12" />
           {/* Detay Bilgiler */}
           <div className="col-md-6">
@@ -378,7 +370,6 @@ export default function VehicleFormComponent({ vehicleID }) {
               onChange={handleChange}
             ></textarea>
           </div>
-
           {/* Buton */}
           <div className="col-12 text-center mt-4">
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>

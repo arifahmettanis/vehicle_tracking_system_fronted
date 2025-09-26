@@ -26,7 +26,7 @@ function MintikaFormPage() {
           </nav>
         </div>
         <section className="section dashboard">
-          <KurumForm kurumID={kurumID} merhaba={'ali'} />
+          <KurumForm kurumID={kurumID} />
         </section>
       </main>
       <Footer></Footer>

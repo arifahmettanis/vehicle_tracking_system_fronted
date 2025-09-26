@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import MintikaDetailComponent from '../../components/MintikaComps/MintikaDetailComponent';
 import { useParams } from 'react-router-dom';
 function MintikaDetailPage() {
-  const { mintikaId } = useParams();
+  const { mintikaID } = useParams();
   return (
     <>
       <Header></Header>
@@ -25,7 +25,7 @@ function MintikaDetailPage() {
           </nav>
         </div>
         <section className="section dashboard">
-          <MintikaDetailComponent mintikaID={mintikaId}></MintikaDetailComponent>
+          <MintikaDetailComponent mintikaID={mintikaID}></MintikaDetailComponent>
         </section>
       </main>
       <Footer></Footer>
