@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.1.165:3000/api/',
+  baseURL: 'http://ukcsgks0o4okow0408wggg84.217.18.210.179.sslip.io/api/',
   withCredentials: true,
   headers: {
     Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`, // genelde "Bearer <token>" formatında
