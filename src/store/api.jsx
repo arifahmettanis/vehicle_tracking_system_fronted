@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://ukcsgks0o4okow0408wggg84.217.18.210.179.sslip.io/api/',
+  baseURL: 'https://api.aractakip.site/api/',
   withCredentials: true,
   headers: {
     Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`, // genelde "Bearer <token>" formatında
@@ -21,16 +21,6 @@ const apiClient = axios.create({
 export const loginUser = (credentials) => {
   return apiClient.post('auth/login', {
     ...credentials,
-  });
-};
-
-/**
- * Kullanıcı çıkış işlemi için API çağrısı yapar.
- * @returns {Promise<object>}
- */
-export const logoutUser = () => {
-  return apiClient.post('index.php', {
-    type: 'logout',
   });
 };
 

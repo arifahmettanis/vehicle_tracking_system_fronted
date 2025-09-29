@@ -1,21 +1,13 @@
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/UserSlice';
 import ActiveTripBanner from '../ActiveTripPageComponents/ActiveTripBanner';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { logoutUser } from '../../store/UserSlice';
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.user);
-  const handleLogout = async () => {
-    try {
-      await dispatch(logout()).unwrap();
-      navigate('/', { replace: true });
-    } catch (err) {
-      console.error('Logout failed:', err);
-    }
-  };
 
   return (
     <>
@@ -58,7 +50,7 @@ function Header() {
                   <li>
                     <button
                       className="dropdown-item d-flex align-items-center"
-                      onClick={handleLogout}
+                      onClick={logoutUser()}
                     >
                       <i className="bi bi-box-arrow-right"></i>
                       <span className="mx-2">Çıkış Yap</span>

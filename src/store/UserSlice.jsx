@@ -5,7 +5,6 @@ import axios from 'axios';
 import {
   controlUser,
   loginUser,
-  logoutUser,
   getUserListAPI,
   getUserByIdAPI,
   createUserAPI,
@@ -28,23 +27,6 @@ export const login = createAsyncThunk('user/login', async (credentials, { reject
   try {
     const response = await loginUser(credentials);
 
-    if (response.data.success) {
-      return response.data;
-    } else {
-      return rejectWithValue(response.data);
-    }
-  } catch (error) {
-    if (error.response && error.response.data) {
-      return rejectWithValue(error.response.data);
-    } else {
-      return rejectWithValue({ error: 'Beklenmedik bir hata oluştu.' });
-    }
-  }
-});
-
-export const logout = createAsyncThunk('user/logout', async (_, { rejectWithValue }) => {
-  try {
-    const response = await logoutUser();
     if (response.data.success) {
       return response.data;
     } else {
@@ -140,6 +122,11 @@ export const UserSlice = createSlice({
     clearRedirectPath: (state) => {
       state.redirectPath = null;
     },
+    logoutUser: (state) => {
+      alert('a');
+      state.user = null;
+      state.status = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -180,13 +167,7 @@ export const UserSlice = createSlice({
         localStorage.removeItem('user');
       });
 */
-    builder.addCase(logout.fulfilled, (state) => {
-      state.status = false;
-      state.user = {};
-      state.error = '';
-      localStorage.removeItem('user');
-      console.log('user silindi');
-    });
+
     builder.addCase(fetchUserList.fulfilled, (state, action) => {
       state.userList = action.payload;
     });
@@ -237,6 +218,6 @@ export const UserSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { clearSelectedUser } = UserSlice.actions;
+export const { clearSelectedUser, logoutUser } = UserSlice.actions;
 
 export default UserSlice.reducer;
