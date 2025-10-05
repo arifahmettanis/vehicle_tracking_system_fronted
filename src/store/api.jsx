@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiClient = axios.create({
+export const apiClient = axios.create({
   baseURL: 'https://api.aractakip.site/api/',
   withCredentials: true,
   headers: {

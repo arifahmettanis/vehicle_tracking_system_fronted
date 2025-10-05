@@ -50,7 +50,7 @@ function Header() {
                   <li>
                     <button
                       className="dropdown-item d-flex align-items-center"
-                      onClick={logoutUser()}
+                      onClick={logoutUser}
                     >
                       <i className="bi bi-box-arrow-right"></i>
                       <span className="mx-2">Çıkış Yap</span>

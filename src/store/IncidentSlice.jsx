@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { reportIncidentAPI } from './api_local';
+import { reportIncidentAPI } from './api';
 
 export const reportIncident = createAsyncThunk(
   'incident/report',

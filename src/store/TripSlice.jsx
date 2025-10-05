@@ -6,7 +6,7 @@ import {
   fetchOldTripsAPI,
   getTripHistoryAPI,
   assignTripAPI,
-} from './api_local';
+} from './api';
 
 const initialState = {
   activeTrip: localStorage.getItem('currentTrip')
