@@ -140,12 +140,9 @@ export const UserSlice = createSlice({
         state.status = true;
         state.user = action.payload.data;
         state.error = null;
-        apiClient.defaults.headers.common['Authorization'] =
-          `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`;
         localStorage.setItem('user', JSON.stringify(action.payload.data));
         console.log(action.payload.data);
-        axios.defaults.headers.common['Authorization'] =
-          `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`;
+
         console.log('token kaydedildi');
         console.log(JSON.parse(localStorage.getItem('user') || '{}')?.token || '');
       })
