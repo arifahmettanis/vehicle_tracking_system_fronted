@@ -17,7 +17,7 @@ const initialState = {
   user: !!localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
   error: '',
   redirectPath: null,
-
+  token: '',
   userList: [],
   selectedUser: null,
   loading: false, // Genel yüklenme
@@ -141,7 +141,8 @@ export const UserSlice = createSlice({
         state.user = action.payload.data;
         state.error = null;
         localStorage.setItem('user', JSON.stringify(action.payload.data));
-        console.log(action.payload.data);
+        console.log(action.payload.data.token);
+        state.token = action.payload.data.token;
 
         console.log('token kaydedildi');
         console.log(JSON.parse(localStorage.getItem('user') || '{}')?.token || '');

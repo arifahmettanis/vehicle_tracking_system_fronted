@@ -13,7 +13,7 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
   const state = store.getState();
-  const token = state.user?.user?.token; // userSlice içindeki token
+  const token = state.user?.token; // userSlice içindeki token
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
