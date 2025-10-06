@@ -143,9 +143,9 @@ export const UserSlice = createSlice({
         localStorage.setItem('user', JSON.stringify(action.payload.data));
         console.log(action.payload.data.token);
         state.token = action.payload.data.token;
-
         console.log('token kaydedildi');
         console.log(JSON.parse(localStorage.getItem('user') || '{}')?.token || '');
+        window.location.reload();
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

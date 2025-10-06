@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { store } from './store';
 
 export const apiClient = axios.create({
   baseURL: 'https://api.aractakip.site/api/',
@@ -9,17 +8,6 @@ export const apiClient = axios.create({
 
     'Content-Type': 'application/json',
   },
-});
-
-apiClient.interceptors.request.use((config) => {
-  const state = store.getState();
-  const token = state.user?.token; // userSlice içindeki token
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
 });
 
 // 2. Projeye özel API çağrılarını fonksiyon olarak tanımla.
