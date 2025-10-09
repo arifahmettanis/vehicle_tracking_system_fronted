@@ -3,14 +3,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  apiClient,
   controlUser,
   loginUser,
   getUserListAPI,
   getUserByIdAPI,
   createUserAPI,
   updateUserAPI,
-} from './api';
+} from './api_local';
 
 const initialState = {
   status: !!localStorage.getItem('user'),

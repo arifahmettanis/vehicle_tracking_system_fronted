@@ -15,25 +15,22 @@ const initialState = {
   error: '',
 };
 
-export const getVehicle = createAsyncThunk(
-  'vehicle/get',
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const response = await getVehicleAPI(credentials);
-      if (response.data.success) {
-        return response.data;
-      } else {
-        return rejectWithValue(response.data);
-      }
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue({ error: 'Beklenmedik bir hata oluştu. Araç çekilemedi' });
-      }
+export const getVehicle = createAsyncThunk('vehicle/get', async (id, { rejectWithValue }) => {
+  try {
+    const response = await getVehicleAPI(id);
+    if (response.data.success) {
+      return response.data;
+    } else {
+      return rejectWithValue(response.data);
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return rejectWithValue(error.response.data);
+    } else {
+      return rejectWithValue({ error: 'Beklenmedik bir hata oluştu. Araç çekilemedi' });
     }
   }
-);
+});
 
 export const createVehicle = createAsyncThunk(
   'vehicle/create',
@@ -140,7 +137,7 @@ export const VehicleSlice = createSlice({
       .addCase(getVehicle.rejected, (state, action) => {
         state.loading = false;
         state.selectedVehicle = null;
-        state.error = action.payload?.error || 'Giriş yapılamadı.';
+        state.error = action.payload?.error || 'araç getirilemedi.';
         localStorage.removeItem('selected_vechile');
       });
     builder

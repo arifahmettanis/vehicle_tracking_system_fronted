@@ -39,11 +39,8 @@ export const controlUser = () => {
  * QR Kodu okutulan aracı getirir.
  * @returns {Promise<object>}
  */
-export const getVehicleAPI = (credentials) => {
-  return apiClient.post('index.php', {
-    ...credentials,
-    type: 'getVechile',
-  });
+export const getVehicleAPI = (id) => {
+  return apiClient.get('trips/selectVehicle/' + id);
 };
 
 /**
@@ -65,9 +62,8 @@ export const createVehicleAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const startTripAPI = (credentials) => {
-  return apiClient.post('index.php', {
+  return apiClient.post('/trips/request', {
     ...credentials,
-    type: 'startTrip',
   });
 };
 
@@ -76,10 +72,7 @@ export const startTripAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const fetchActiveTripAPI = (credentials) => {
-  return apiClient.post('index.php', {
-    ...credentials,
-    type: 'activeTrip',
-  });
+  return apiClient.get('/trips/current');
 };
 
 /**
@@ -87,10 +80,7 @@ export const fetchActiveTripAPI = (credentials) => {
  * @returns {Promise<object>}
  */
 export const completeTripAPI = (formData) => {
-  formData.append('type', 'completeTrip');
-  return apiClient.post('index.php', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+  return apiClient.post('/trips/current/complete');
 };
 
 /**
