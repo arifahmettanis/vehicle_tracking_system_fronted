@@ -9,7 +9,7 @@ import {
   getUserByIdAPI,
   createUserAPI,
   updateUserAPI,
-} from './api_local';
+} from './api';
 
 const initialState = {
   status: !!localStorage.getItem('user'),
