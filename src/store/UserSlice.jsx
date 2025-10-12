@@ -219,6 +219,6 @@ export const UserSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { clearSelectedUser, logoutUser } = UserSlice.actions;
+export const { clearSelectedUser, logoutUser, checkSession } = UserSlice.actions;
 
 export default UserSlice.reducer;
