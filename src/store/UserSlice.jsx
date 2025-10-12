@@ -10,7 +10,19 @@ import {
   createUserAPI,
   updateUserAPI,
 } from './api';
+function isTokenExpired(token) {
+  if (!token) return true;
 
+  try {
+    const payloadBase64 = token.split('.')[1];
+    const payload = JSON.parse(atob(payloadBase64));
+    const exp = payload.exp * 1000; // saniye → ms
+    return Date.now() > exp;
+  } catch (e) {
+    console.error('Geçersiz token:', e);
+    return true;
+  }
+}
 const initialState = {
   status: !!localStorage.getItem('user'),
   user: !!localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
@@ -40,27 +52,6 @@ export const login = createAsyncThunk('user/login', async (credentials, { reject
     }
   }
 });
-
-export const checkSession = createAsyncThunk(
-  'user/checkSession',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await controlUser();
-
-      if (response.data.success) {
-        return response.data;
-      } else {
-        return rejectWithValue(response.data);
-      }
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue({ error: 'Beklenmedik bir hata oluştu.' });
-      }
-    }
-  }
-);
 
 export const fetchUserList = createAsyncThunk('user/fetchList', async (_, { rejectWithValue }) => {
   try {
@@ -127,6 +118,15 @@ export const UserSlice = createSlice({
 
       state.user = null;
       state.status = false;
+    },
+    checkSession: (state) => {
+      const userData = JSON.parse(localStorage.getItem('user'));
+      const token = userData?.token;
+
+      if (!token || isTokenExpired(token)) {
+        localStorage.removeItem('user');
+        state.user = null;
+      }
     },
   },
   extraReducers: (builder) => {

@@ -8,7 +8,10 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.user);
-
+  const logoutHandle = () => {
+    dispatch(logoutUser());
+    navigate('/');
+  };
   return (
     <>
       <header id="header" className="header fixed-top d-flex flex-column justify-content-center">
@@ -50,7 +53,7 @@ function Header() {
                   <li>
                     <button
                       className="dropdown-item d-flex align-items-center"
-                      onClick={() => logoutUser()}
+                      onClick={logoutHandle()}
                     >
                       <i className="bi bi-box-arrow-right"></i>
                       <span className="mx-2">Çıkış Yap</span>
