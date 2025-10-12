@@ -123,7 +123,8 @@ export const UserSlice = createSlice({
       state.redirectPath = null;
     },
     logoutUser: (state) => {
-      alert('a');
+      localStorage.removeItem('user');
+
       state.user = null;
       state.status = false;
     },

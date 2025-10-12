@@ -42,7 +42,7 @@ function Header() {
                 >
                   <li className="dropdown-header text-center">
                     <h6>{user.name}</h6>
-                    <span>{user.role_name}</span>
+                    <span>{user.role}</span>
                   </li>
                   <li>
                     <hr className="dropdown-divider" />
@@ -50,7 +50,7 @@ function Header() {
                   <li>
                     <button
                       className="dropdown-item d-flex align-items-center"
-                      onClick={logoutUser}
+                      onClick={() => logoutUser()}
                     >
                       <i className="bi bi-box-arrow-right"></i>
                       <span className="mx-2">Çıkış Yap</span>
