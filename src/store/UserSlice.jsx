@@ -114,12 +114,14 @@ export const UserSlice = createSlice({
       state.redirectPath = null;
     },
     logoutUser: (state) => {
+      alert('Çıkış yapıldı.');
       localStorage.removeItem('user');
 
       state.user = null;
       state.status = false;
     },
     checkSession: (state) => {
+      alert('Toxen patladı.');
       const userData = JSON.parse(localStorage.getItem('user'));
       const token = userData?.token;
 
@@ -155,19 +157,6 @@ export const UserSlice = createSlice({
         state.error = action.payload?.error || 'Giriş yapılamadı.';
         localStorage.removeItem('user');
       });
-
-    /*builder
-      .addCase(checkSession.fulfilled, (state, action) => {
-        state.loading = false;
-      })
-      .addCase(checkSession.rejected, (state, action) => {
-        state.status = false;
-        state.user = {};
-        alert('Oturum süresi dolmuş veya geçersiz.');
-        state.error = 'Oturum süresi dolmuş veya geçersiz.';
-        localStorage.removeItem('user');
-      });
-*/
 
     builder.addCase(fetchUserList.fulfilled, (state, action) => {
       state.userList = action.payload;
