@@ -121,11 +121,11 @@ export const UserSlice = createSlice({
       state.status = false;
     },
     checkSession: (state) => {
-      alert('Toxen patladı.');
       const userData = JSON.parse(localStorage.getItem('user'));
       const token = userData?.token;
 
       if (!token || isTokenExpired(token)) {
+        alert('Toxen patladı.');
         localStorage.removeItem('user');
         state.user = null;
       }
