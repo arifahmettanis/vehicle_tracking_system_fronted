@@ -115,7 +115,7 @@ export default function VehicleFormComponent({ vehicleID }) {
     try {
       if (isEditMode) {
         // Düzenleme modu: updateVehicle thunk'ını çağır
-        await dispatch(updateVehicle({ id: vehicleID, data: formData })).unwrap();
+        await dispatch(updateVehicle({ vehicleID, formData })).unwrap();
         await Swal.fire('Başarılı!', 'Araç bilgileri güncellendi.', 'success');
         navigate(`/vehicle/${vehicleID}`); // Detay sayfasına yönlendir
       } else {

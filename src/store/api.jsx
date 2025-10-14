@@ -47,41 +47,11 @@ export const getAllVehiclesAPI = (credentials) => apiClient.get('vehicles');
 
 export const createVehicleAPI = (credentials) => apiClient.post('/vehicles', credentials);
 
-/**
- * QR Kodu okutulan aracı getirir.
- * @returns {Promise<object>}
- */
-export const startTripAPI = (credentials) => {
-  return apiClient.post('/trips/request', {
-    ...credentials,
-  });
-};
+export const startTripAPI = (credentials) => apiClient.post('/trips/request', credentials);
 
-/**
- * QR Kodu okutulan aracı getirir.
- * @returns {Promise<object>}
- */
-export const fetchActiveTripAPI = (credentials) => {
-  return apiClient.get('/trips/current');
-};
+export const fetchActiveTripAPI = () => apiClient.get('/trips/current');
 
-/**
- * QR Kodu okutulan aracı getirir.
- * @returns {Promise<object>}
- */
-export const completeTripAPI = (formData) => {
-  return apiClient.post('/trips/current/complete');
-};
-
-/**
- * Araç listesini getiren API çağrısı yapar.
- * @returns {Promise<object>}
- */
-export const fetchVehicles = () => {
-  return apiClient.post('index.php', {
-    type: 'aracListele',
-  });
-};
+export const completeTripAPI = (formData) => apiClient.post('/trips/current/complete');
 
 /**
  * Yeni bir kaza/arıza bildirimi yapar.
@@ -101,33 +71,7 @@ export const reportIncidentAPI = (credentials) => {
   );
 };
 
-/**
- * Rol bazlı filtrelenmiş kurum listesini getirir.
- * @returns {Promise<object>}
- */
-export const fetchKurumAPI = () => {
-  return apiClient.get('kurumlar', {});
-};
-
-/**
- * Rol bazlı filtrelenmiş mıntıka listesini getirir.
- * @returns {Promise<object>}
- */
-export const fetchMintikaAPI = () => {
-  return apiClient.post('index.php', { type: 'fetchMintika' });
-};
-
-/**
- * Rol bazlı filtrelenmiş mıntıka listesini getirir.
- * @returns {Promise<object>}
- */
-export const fetchOldTripsAPI = (vehicleId) => {
-  return apiClient.post('index.php', { vehicleId: vehicleId, type: 'fetchOldTrips' });
-};
-
-export const getTripHistoryAPI = (filters) => {
-  return apiClient.post('index.php', { type: 'getTripHistory', ...filters });
-};
+export const fetchKurumAPI = () => apiClient.get('kurumlar');
 
 export const assignTripAPI = (tripData) => {
   return apiClient.post('index.php', { type: 'assignTrip', ...tripData });
@@ -141,20 +85,11 @@ export const assignTripAPI = (tripData) => {
  *
  */
 
-export const getVehicleListAPI = () => apiClient.get('vehicles', {});
-/**
- * ID ile tek bir araç detayı getirir.
- * @param {number} vehicleId - Detayı istenen aracın ID'si.
- * @returns {Promise<object>}
- */
+export const getVehicleListAPI = () => apiClient.get('vehicles');
+
 export const fetchVehicleByIdAPI = (vehicleId) => apiClient.get('vehicles/' + vehicleId, {});
 
-/**
- * Yeni bir araç ekler.
- * @param {object} vehicleData - Eklenecek aracın bilgileri
- * @returns {Promise<object>}
- */
-export const addVehicle = (vehicleData) => apiClient.post('vehicles/', { ...vehicleData });
+export const addVehicle = (vehicleData) => apiClient.post('vehicles/', vehicleData);
 
 export const updateVehicleAPI = (vehicleId, vehicleData) =>
   apiClient.put('vehicles/' + vehicleId, vehicleData);
