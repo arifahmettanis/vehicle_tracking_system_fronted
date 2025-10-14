@@ -1,11 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {
-  startTripAPI,
-  fetchActiveTripAPI,
-  completeTripAPI,
-  getTripHistoryAPI,
-  assignTripAPI,
-} from './api';
+import { startTripAPI, fetchActiveTripAPI, completeTripAPI, assignTripAPI } from './api';
 
 const initialState = {
   activeTrip: localStorage.getItem('currentTrip')
