@@ -3,7 +3,6 @@ import {
   startTripAPI,
   fetchActiveTripAPI,
   completeTripAPI,
-  fetchOldTripsAPI,
   getTripHistoryAPI,
   assignTripAPI,
 } from './api';
