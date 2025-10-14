@@ -4,14 +4,10 @@ export const apiClient = axios.create({
   baseURL: 'https://api.aractakip.site/api/',
   withCredentials: true,
   headers: {
-    Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`, // genelde "Bearer <token>" formatında
-
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`,
     'Content-Type': 'application/json',
   },
 });
-
-// 2. Projeye özel API çağrılarını fonksiyon olarak tanımla.
-// Bu, "type" parametresini ve diğer detayları gizler.
 
 /**
  * Kullanıcı giriş işlemi için API çağrısı yapar.
@@ -49,13 +45,7 @@ export const getVehicleAPI = (id) => {
  */
 export const getAllVehiclesAPI = (credentials) => apiClient.get('vehicles');
 
-/**
- * QR Kodu okutulan aracı getirir.
- * @returns {Promise<object>}
- */
-export const createVehicleAPI = (credentials) => {
-  return apiClient.post('/vehicles', credentials);
-};
+export const createVehicleAPI = (credentials) => apiClient.post('/vehicles', credentials);
 
 /**
  * QR Kodu okutulan aracı getirir.

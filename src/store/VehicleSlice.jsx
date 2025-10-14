@@ -100,6 +100,7 @@ export const updateVehicle = createAsyncThunk(
   'vehicles/update',
   // Thunk'a { vehicleId, formData } şeklinde bir obje gelecek
   async ({ vehicleId, formData }, { rejectWithValue }) => {
+    console.log(vehicleId);
     try {
       const response = await updateVehicleAPI(vehicleId, formData);
       if (response.data.success) {
