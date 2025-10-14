@@ -24,6 +24,7 @@ export default function VehicleFormComponent({ vehicleID }) {
   // Redux'tan gerekli state'leri al
   const { selectedVehicle, isSubmitting, error } = useSelector((state) => state.vehicle);
   const { kurumList } = useSelector((state) => state.kurum);
+  const { user: currentUser } = useSelector((state) => state.user);
   console.log('kurumList');
   console.log(kurumList);
   const { mintikaList } = useSelector((state) => state.mintika);

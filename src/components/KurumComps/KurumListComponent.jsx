@@ -27,6 +27,7 @@ export default function KurumListComponent() {
             <tr>
               <th>ID</th>
               <th>Kurum Adı</th>
+              <th>Mıntıkası</th>
               <th>Sorumlu</th>
               <th>İşlemler</th>
             </tr>
@@ -37,6 +38,9 @@ export default function KurumListComponent() {
                 <td>{m.id}</td>
                 <td>
                   <strong>{m.name}</strong>
+                </td>
+                <td>
+                  <strong>{m.mintika_name}</strong>
                 </td>
                 <td>{m.responsible_name || '-'}</td>
                 <td>

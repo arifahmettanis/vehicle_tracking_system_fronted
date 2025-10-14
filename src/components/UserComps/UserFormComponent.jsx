@@ -108,7 +108,7 @@ function UserFormComponent({ userID }) {
     if (
       !formData.name ||
       !formData.username ||
-      !formData.password ||
+      (!isEditMode && !formData.password) ||
       !formData.role ||
       !formData.kurum_id ||
       !formData.mintika_id
