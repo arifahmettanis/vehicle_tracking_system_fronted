@@ -2,25 +2,25 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TimeCounter from './TimeCounter';
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale'; // Türkçe aylar ve günler için
+import { tr } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { memo } from 'react';
+
 function ActiveTripComponent() {
   const dispatch = useDispatch();
-  const { activeTrip } = useSelector((store) => store.trip);
 
-  const trip = useSelector((store) => store.trip);
+  const { activeTrip, loading } = useSelector((store) => store.trip);
 
-  if (trip.loading) {
-    return <div className="alert alert-warning">Aktif seyehat bilgisi yükleniyor...</div>;
-  }
-
-  if (!trip.activeTrip) {
+  if (!activeTrip) {
     return (
       <div className="alert alert-danger">
         Aktif bir seyehatiniz bulunmamaktadır. <Link to={'/'}> Anasayfaya Dön</Link>{' '}
       </div>
     );
+  }
+
+  if (loading) {
+    return <div className="alert alert-warning">Aktif seyehat bilgisi yükleniyor...</div>;
   }
 
   return (

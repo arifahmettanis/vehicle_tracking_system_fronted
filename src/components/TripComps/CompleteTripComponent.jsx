@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { completeTrip } from '../../store/TripSlice';
 import Swal from 'sweetalert2';
+import SinglePhotoUploader from '../GeneralComponents/SinglePhotoUploader';
 import PhotoUploader from '../GeneralComponents/PhotoUploader';
 function CompleteTripComponent() {
   // Mevcut hook'lar aynı kalıyor
@@ -12,6 +13,12 @@ function CompleteTripComponent() {
 
   const [lastKm, setLastKm] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [photoFront, setPhotoFront] = useState(null);
+  const [photoBack, setPhotoBack] = useState(null);
+  const [photoLeft, setPhotoLeft] = useState(null);
+  const [photoRight, setPhotoRight] = useState(null);
+  const [photoInside, setPhotoInside] = useState(null);
 
   const [photos, setPhotos] = useState([]);
   const PHOTO_LIMIT = 5;
@@ -79,45 +86,49 @@ function CompleteTripComponent() {
         <h5 className="card-title mb-0">Yolculuğu Tamamla</h5>
       </div>
       <div className="card-body mt-1">
+        <div className="alert alert-secondary d-flex align-items-center">
+          <i className="bi bi-car-front-fill me-3 fs-4"></i>
+          <div>
+            <strong>{activeTrip.plate}</strong> plakalı{' '}
+            <strong>
+              {activeTrip.brand} {activeTrip.model}
+            </strong>{' '}
+            aracını teslim ediyorsunuz.
+          </div>
+        </div>
         <p className="card-text text-muted mb-4">
           Lütfen aracı teslim etmeden önce son bilgileri eksiksiz olarak girin.
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
-          <fieldset disabled>
-            <legend className="h6 mb-3">Teslim Edilen Araç</legend>
-            <div className="row">
-              <div className="col-md-4 mb-3">
-                <label htmlFor="plateInput" className="form-label">
-                  Plaka
-                </label>
-                <input
-                  type="text"
-                  id="plateInput"
-                  className="form-control"
-                  value={activeTrip.plate}
-                  readOnly
-                />
-              </div>
-              <div className="col-md-8 mb-3">
-                <label htmlFor="modelInput" className="form-label">
-                  Marka / Model
-                </label>
-                <input
-                  type="text"
-                  id="modelInput"
-                  className="form-control"
-                  value={`${activeTrip.brand} ${activeTrip.model}`}
-                  readOnly
-                />
-              </div>
-            </div>
-          </fieldset>
-          <hr />
-          <legend className="h6 mb-3">Teslimat Bilgileri</legend>
-
           {/* FOTOĞRAF YÜKLEME ALANI (TAMAMEN DEĞİŞTİ) */}
           <PhotoUploader photos={photos} setPhotos={setPhotos}></PhotoUploader>
+
+          <SinglePhotoUploader
+            label="Araç Ön Fotoğrafı"
+            photo={photoFront}
+            setPhoto={setPhotoFront}
+          />
+          <SinglePhotoUploader
+            label="Araç Arka Fotoğrafı"
+            photo={photoBack}
+            setPhoto={setPhotoBack}
+          />
+          <SinglePhotoUploader
+            label="Araç Sol Fotoğrafı"
+            photo={photoLeft}
+            setPhoto={setPhotoLeft}
+          />
+          <SinglePhotoUploader
+            label="Araç Sağ Fotoğrafı"
+            photo={photoRight}
+            setPhoto={setPhotoRight}
+          />
+          <SinglePhotoUploader
+            label="Araç İç Fotoğrafı"
+            photo={photoInside}
+            setPhoto={setPhotoInside}
+          />
 
           {/* Gönder Butonu (Aynı) */}
           <div className="d-grid mt-4">

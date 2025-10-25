@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getVehicle } from '../store/VehicleSlice';
+import { getVehicle } from '../../store/VehicleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import Header from '../components/GeneralComponents/Header';
-import Sidebar from '../components/GeneralComponents/Sidebar';
-import Footer from '../components/GeneralComponents/Footer';
-import StartTripComponent from '../components/StartTripComponents/StartTripComponent';
+import Header from '../../components/GeneralComponents/Header';
+import Sidebar from '../../components/GeneralComponents/Sidebar';
+import Footer from '../../components/GeneralComponents/Footer';
+import StartTripComponent from '../../components/TripComps/StartTripComponent';
 function StartTripPage() {
   const [params] = useSearchParams();
   const id = params.get('id');

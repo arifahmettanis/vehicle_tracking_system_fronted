@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ActiveTripBanner from '../ActiveTripPageComponents/ActiveTripBanner';
+import ActiveTripBanner from '../TripComps/ActiveTripBanner';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../store/UserSlice';

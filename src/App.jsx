@@ -6,14 +6,12 @@ import { Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Login';
 import Main from './pages/Main';
 import NotFoundPage from './pages/NotFoundPage';
-import StartTripPage from './pages/StartTrip';
+
 import { fetchActiveTrip } from './store/TripSlice';
-import ActiveTripPage from './pages/ActiveTrip';
-import CompleteTripPage from './pages/CompleteTrip';
+
 import ReportIncident from './pages/ReportIncident';
 import { AdminRoute, DirectorRoute, ManagerRoute } from './components/GeneralComponents/AdminRoute';
 import TripHistory from './pages/TripHistory';
-import AssignTrip from './pages/AssignTrip';
 
 //! Mıntıka Yönetimi
 import MintikaListPage from './pages/Mintika/MintikaListPage';
@@ -38,6 +36,12 @@ import VehicleListPage from './pages/Vehicle/VehicleListPage';
 import VehicleDetailPage from './pages/Vehicle/VehicleDetailPage';
 import CreateVehiclePage from './pages/Vehicle/CreateVehiclePage';
 import EditVehiclePage from './pages/Vehicle/EditVehiclePage';
+
+//! Trip Yönetimi
+import StartTripPage from './pages/Trip/StartTrip';
+import ActiveTripPage from './pages/Trip/ActiveTrip';
+import CompleteTripPage from './pages/Trip/CompleteTrip';
+import AssignTrip from './pages/Trip/AssignTrip';
 
 function App() {
   const { user, status } = useSelector((store) => store.user);

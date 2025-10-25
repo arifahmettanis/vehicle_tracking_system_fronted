@@ -155,7 +155,7 @@ export const UserSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
-        state.user = {};
+        state.user = null;
         // Hata mesajını API'den gelen payload'dan al
         state.error = action.payload?.error || 'Giriş yapılamadı.';
         localStorage.removeItem('user');
