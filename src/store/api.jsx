@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: 'http://10.90.132.89:3000/api/',
+  baseURL: 'https://api.aractakip.site/api/',
   withCredentials: true,
   headers: {
     Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`,
