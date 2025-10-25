@@ -47,12 +47,12 @@ function CompleteTripComponent() {
     const formData = new FormData();
     formData.append('id', activeTrip.id);
     formData.append('type', 'completeTrip');
-
-    // Tüm fotoğrafları döngüyle FormData'ya ekliyoruz
-    // PHP'nin bunu bir dizi olarak alabilmesi için `photos[]` ismini kullanıyoruz
-    photos.forEach((photo, index) => {
-      formData.append('photos[]', photo);
-    });
+    formData.append('last_km', lastKm);
+    formData.append('vehicle_front', photoFront);
+    formData.append('vehicle_back', photoBack);
+    formData.append('vehicle_left', photoLeft);
+    formData.append('vehicle_right', photoRight);
+    formData.append('vehicle_inside', photoInside);
 
     try {
       await dispatch(completeTrip(formData)).unwrap();
@@ -102,33 +102,33 @@ function CompleteTripComponent() {
 
         <form onSubmit={handleSubmit} noValidate>
           {/* FOTOĞRAF YÜKLEME ALANI (TAMAMEN DEĞİŞTİ) */}
-          <PhotoUploader photos={photos} setPhotos={setPhotos}></PhotoUploader>
-
-          <SinglePhotoUploader
-            label="Araç Ön Fotoğrafı"
-            photo={photoFront}
-            setPhoto={setPhotoFront}
-          />
-          <SinglePhotoUploader
-            label="Araç Arka Fotoğrafı"
-            photo={photoBack}
-            setPhoto={setPhotoBack}
-          />
-          <SinglePhotoUploader
-            label="Araç Sol Fotoğrafı"
-            photo={photoLeft}
-            setPhoto={setPhotoLeft}
-          />
-          <SinglePhotoUploader
-            label="Araç Sağ Fotoğrafı"
-            photo={photoRight}
-            setPhoto={setPhotoRight}
-          />
-          <SinglePhotoUploader
-            label="Araç İç Fotoğrafı"
-            photo={photoInside}
-            setPhoto={setPhotoInside}
-          />
+          <div className="d-flex flex-wrap gap-4">
+            <SinglePhotoUploader
+              label="Araç Ön Fotoğrafı"
+              photo={photoFront}
+              setPhoto={setPhotoFront}
+            />
+            <SinglePhotoUploader
+              label="Araç Arka Fotoğrafı"
+              photo={photoBack}
+              setPhoto={setPhotoBack}
+            />
+            <SinglePhotoUploader
+              label="Araç Sol Fotoğrafı"
+              photo={photoLeft}
+              setPhoto={setPhotoLeft}
+            />
+            <SinglePhotoUploader
+              label="Araç Sağ Fotoğrafı"
+              photo={photoRight}
+              setPhoto={setPhotoRight}
+            />
+            <SinglePhotoUploader
+              label="Araç İç Fotoğrafı"
+              photo={photoInside}
+              setPhoto={setPhotoInside}
+            />
+          </div>
 
           {/* Gönder Butonu (Aynı) */}
           <div className="d-grid mt-4">

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: 'https://api.aractakip.site/api/',
+  baseURL: 'http://10.90.132.89:3000/api/',
   withCredentials: true,
   headers: {
     Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}')?.token || ''}`,
@@ -51,7 +51,12 @@ export const startTripAPI = (credentials) => apiClient.post('/trips/request', cr
 
 export const fetchActiveTripAPI = () => apiClient.get('/trips/current');
 
-export const completeTripAPI = (formData) => apiClient.post('/trips/current/complete');
+export const completeTripAPI = (formData) =>
+  apiClient.post('/trips/current/complete', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 
 /**
  * Yeni bir kaza/arıza bildirimi yapar.
