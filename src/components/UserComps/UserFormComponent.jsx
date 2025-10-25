@@ -31,23 +31,22 @@ function UserFormComponent({ userID }) {
     username: '',
     password: '', // Yeni şifre alanı
     role: '',
-    kurum_id: '',
-    mintika_id: '',
+    kurum_id: 0,
+    mintika_id: 0,
     phone: '',
   });
 
   // Sayfa yüklendiğinde veri çekme ve başlangıç state'ini ayarlama
   useEffect(() => {
-    // Dropdown'lar için listeleri çek
-    dispatch(fetchMintikalar());
     dispatch(fetchKurumlar());
+
+    if (isAdmin) dispatch(fetchMintikalar());
 
     // Eğer düzenleme modundaysak, mevcut kullanıcı verisini çek
     if (isEditMode) {
       dispatch(fetchUserById(userID));
     }
 
-    // Component kaldırıldığında seçili kullanıcı state'ini temizle
     return () => {
       if (isEditMode) dispatch(clearSelectedUser());
     };
@@ -91,12 +90,29 @@ function UserFormComponent({ userID }) {
   // Input değişimlerini yönet
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Değeri state'e göndermeden önce işleyelim
+    let processedValue = value;
+
+    // Hangi alanların sayısal olması gerektiğini burada belirliyoruz
+    switch (name) {
+      case 'mintika_id':
+      case 'kurum_id':
+        processedValue = value === '' ? '' : Number(value);
+        break;
+      default:
+        // Diğer tüm alanlar için değeri olduğu gibi bırak (string kalacak)
+        processedValue = value;
+        break;
+    }
+
     setFormData((prev) => {
-      const newFormData = { ...prev, [name]: value };
-      // Eğer mıntıka değiştiyse, kurum seçimini sıfırla
+      const newFormData = { ...prev, [name]: processedValue };
+
       if (name === 'mintika_id') {
-        newFormData.kurum_id = '';
+        newFormData.kurum_id = ''; // Kurum seçimini sıfırla
       }
+
       return newFormData;
     });
   };
@@ -134,6 +150,12 @@ function UserFormComponent({ userID }) {
     }
   };
 
+  if (error) {
+    return <div className="alert alert-danger">{error || 'Bilinmeyen hata'}</div>;
+  }
+
+  if (selectedUser) {
+  }
   return (
     <div className="card">
       <div className="card-header d-flex justify-content-between align-items-center">

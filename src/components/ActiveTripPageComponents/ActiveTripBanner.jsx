@@ -1,61 +1,65 @@
 // ActiveTripBanner.jsx
 
-import React, {memo, useEffect} from 'react';
+import React, { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import TimeCounter from './TimeCounter';
 import { Link } from 'react-router-dom';
 function ActiveTripBanner() {
-    const { activeTrip } = useSelector(store => store.trip);
-    
-    useEffect(() => {
-      if (activeTrip) {
-        document.body.classList.add("has-banner")
-      }else{
-        document.body.classList.remove('has-banner')
-      }
-    }, [activeTrip])
-    
+  const { activeTrip } = useSelector((store) => store.trip);
 
-    if (!activeTrip) {
-        return null;
+  useEffect(() => {
+    if (activeTrip) {
+      document.body.classList.add('has-banner');
+    } else {
+      document.body.classList.remove('has-banner');
     }
-    console.log(activeTrip.start_time +" ı Time a gönderdim abi")
+  }, [activeTrip]);
 
-    return (
+  if (!activeTrip) {
+    return null;
+  }
+  console.log(activeTrip.start_date + ' ı Time a gönderdim abi');
 
-        <div
-            className="alert alert-success d-flex align-items-center rounded-0 shadow-sm p-2"
-            role="alert"
-            style={{
-                position: 'fixed',
-                top: '60px',
-                left: '0',
-                right: '0',
-                zIndex: 1030,
-                height: '70px',
-                display: 'flex',
-                alignItems: 'center',
-                margin: '0',
-                padding: '10px 20px',
-            }}
-        >
+  return (
+    <div
+      className="alert alert-success d-flex align-items-center rounded-0 shadow-sm p-2"
+      role="alert"
+      style={{
+        position: 'fixed',
+        top: '60px',
+        left: '0',
+        right: '0',
+        zIndex: 1030,
+        height: '70px',
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0',
+        padding: '10px 20px',
+      }}
+    >
+      <img
+        src="/octavia.png"
+        alt="Car"
+        className="rounded me-3"
+        style={{ width: '60px', height: 'auto' }}
+      />
 
-            <img src="/octavia.png" alt="Car" className="rounded me-3" style={{ width: "60px", height: "auto" }} />
-
-            <div className="flex-grow-1">
-                <div>
-                    <strong>Aktif Seyehat</strong> - <TimeCounter time={activeTrip.start_date} />
-                    <br />
-                    <span>{activeTrip.brand} {activeTrip.model} - <strong>{activeTrip.plate}</strong></span>
-                </div>
-            </div>
-
-            {/* Sağ tarafa bir "Detayları Gör" butonu ekleyelim */}
-            <Link to="/trip/active" className="btn btn-dark btn-sm ms-auto">
-                Detay <i className="bi bi-arrow-right"></i>
-            </Link>
+      <div className="flex-grow-1">
+        <div>
+          <strong>Aktif Seyehat</strong> - <TimeCounter time={activeTrip.start_date} />
+          <br />
+          <span>
+            {activeTrip.brand} {activeTrip.model} - <strong>{activeTrip.plate}</strong>
+          </span>
         </div>
-    );
+      </div>
+
+      {/* Sağ tarafa bir "Detayları Gör" butonu ekleyelim */}
+      <Link to="/trip/active" className="btn btn-dark btn-sm ms-auto">
+        Detay <i className="bi bi-arrow-right"></i>
+      </Link>
+    </div>
+  );
 }
 
 export default memo(ActiveTripBanner);

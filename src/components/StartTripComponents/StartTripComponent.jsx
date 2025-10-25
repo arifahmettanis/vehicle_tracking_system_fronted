@@ -12,25 +12,29 @@ function StartTripComponent({ id }) {
   console.log(initialState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [destination, setDestination] = useState('');
   const [tripReason, setTripReason] = useState('');
   const [description, setDescription] = useState('');
   const [estimatedReturnTime, setEstimatedReturnTime] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [photos, setPhotos] = useState([]);
+
   useEffect(() => {
     dispatch(getVehicle(id));
   }, [dispatch]);
+
   console.log(selectedVehicle);
   console.log(error);
 
   if (loading) {
-    return 'Yükleniyor...';
+    return '';
   }
 
   if (error) {
-    return 'Bu aracı alamazsınız kiii hahaha...';
+    return <div className="alert alert-danger">Hata: {error}</div>;
   }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const tripData = {

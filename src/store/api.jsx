@@ -91,8 +91,8 @@ export const fetchVehicleByIdAPI = (vehicleId) => apiClient.get('vehicles/' + ve
 
 export const addVehicle = (vehicleData) => apiClient.post('vehicles/', vehicleData);
 
-export const updateVehicleAPI = (vehicleId, vehicleData) =>
-  apiClient.put('vehicles/' + vehicleId, vehicleData);
+export const updateVehicleAPI = (vehicleID, vehicleData) =>
+  apiClient.put('vehicles/' + vehicleID, vehicleData);
 
 /**
  *

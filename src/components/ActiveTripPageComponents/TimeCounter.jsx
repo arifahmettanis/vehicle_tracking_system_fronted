@@ -1,26 +1,21 @@
 import { differenceInMinutes, min } from 'date-fns';
 import { useState, useEffect, memo } from 'react';
 function TimeCounter({ time }) {
-    const [elapsedTotalMinutes, setElapsedTotalMinutes] = useState(0);
-    
-    useEffect(() => {
-        const tripStartTime = new Date(time);
-        setElapsedTotalMinutes(differenceInMinutes(new Date(), tripStartTime));
-        setInterval(() => {
-            setElapsedTotalMinutes(differenceInMinutes(new Date(), tripStartTime));
-        },1000)
-    }, [time]);
+  const [elapsedTotalMinutes, setElapsedTotalMinutes] = useState(0);
+  console.log('Üstten gelen zaman : ', time);
+  useEffect(() => {
+    const updateTime = () => setElapsedTotalMinutes(differenceInMinutes(new Date(), time));
 
-    const hours = Math.floor(elapsedTotalMinutes / 60);
-    const minutes = elapsedTotalMinutes % 60;
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [time]);
 
+  const hours = Math.floor(elapsedTotalMinutes / 60);
+  const minutes = elapsedTotalMinutes % 60;
 
-    return (
-        <>
-            {hours > 0 ? hours + " saat " + minutes + " dakika" : minutes + " dakika"}
-
-        </>
-    )
+  console.log(hours > 0 ? hours + ' saat ' + minutes + ' dakika' : minutes + ' dakika');
+  return <>{hours > 0 ? hours + ' saat ' + minutes + ' dakika' : minutes + ' dakika'}</>;
 }
 
-export default memo(TimeCounter)
+export default memo(TimeCounter);

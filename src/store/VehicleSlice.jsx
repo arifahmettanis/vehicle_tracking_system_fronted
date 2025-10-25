@@ -99,10 +99,10 @@ export const fetchVehicleById = createAsyncThunk(
 export const updateVehicle = createAsyncThunk(
   'vehicles/update',
   // Thunk'a { vehicleId, formData } şeklinde bir obje gelecek
-  async ({ vehicleId, formData }, { rejectWithValue }) => {
-    console.log(vehicleId);
+  async ({ vehicleID, formData }, { rejectWithValue }) => {
+    console.log(vehicleID);
     try {
-      const response = await updateVehicleAPI(vehicleId, formData);
+      const response = await updateVehicleAPI(vehicleID, formData);
       if (response.data.success) {
         // Başarılı olursa, güncellenmiş veriyi de payload olarak döndürelim
         return { id: vehicleId, ...formData };
@@ -138,7 +138,7 @@ export const VehicleSlice = createSlice({
       .addCase(getVehicle.rejected, (state, action) => {
         state.loading = false;
         state.selectedVehicle = null;
-        state.error = action.payload?.error || 'araç getirilemedi.';
+        state.error = action.payload.message || 'araç getirilemedi.';
         localStorage.removeItem('selected_vechile');
       });
     builder

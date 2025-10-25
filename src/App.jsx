@@ -40,7 +40,7 @@ import CreateVehiclePage from './pages/Vehicle/CreateVehiclePage';
 import EditVehiclePage from './pages/Vehicle/EditVehiclePage';
 
 function App() {
-  const user = useSelector((store) => store.user);
+  const { user, status } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,13 +48,13 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (user.status) {
+    if (status) {
       console.log('Kullanıcı giriş yapmış, aktif yolculuk kontrol ediliyor...');
       dispatch(fetchActiveTrip());
     }
-  }, [dispatch, user.status]);
+  }, [dispatch, status]);
 
-  if (!user.status) {
+  if (!user) {
     return <LoginPage></LoginPage>;
   } else {
     return (

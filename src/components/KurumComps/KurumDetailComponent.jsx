@@ -5,18 +5,17 @@ import { fetchKurumById, clearSelectedKurum } from '../../store/KurumSlice';
 
 export default function KurumDetailComponent({ kurumID }) {
   const dispatch = useDispatch();
-  const { selectedKurum: kurum, loading } = useSelector((state) => state.kurum);
-  console.log(kurumID);
-  console.log(kurum);
-  console.log(loading);
+  const { selectedKurum: kurum, loading, error } = useSelector((state) => state.kurum);
   useEffect(() => {
     dispatch(fetchKurumById(kurumID));
     return () => {
       dispatch(clearSelectedKurum());
     };
   }, [dispatch, kurumID]);
-
-  if (loading || !kurum) return <p>Yükleniyor...</p>;
+  if (error) {
+    return <div className="alert alert-danger">Hata: {error}</div>;
+  }
+  if (loading || !kurum) return <div className="alert alert-warning">Yükleniyor</div>;
 
   return (
     <div className="card">

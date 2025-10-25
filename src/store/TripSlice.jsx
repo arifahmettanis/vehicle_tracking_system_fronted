@@ -8,6 +8,11 @@ const initialState = {
   tripHistory: [],
   loading: false,
   error: null,
+  errors: {
+    startError: false,
+    activeError: false,
+    completeError: false,
+  },
 };
 
 export const startTrip = createAsyncThunk(
@@ -171,6 +176,7 @@ export const TripSlice = createSlice({
     builder
       .addCase(completeTrip.pending, (state, action) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(completeTrip.fulfilled, (state, action) => {
         state.loading = false;

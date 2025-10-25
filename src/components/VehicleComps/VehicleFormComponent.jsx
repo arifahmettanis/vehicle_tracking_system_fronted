@@ -18,15 +18,11 @@ export default function VehicleFormComponent({ vehicleID }) {
   const navigate = useNavigate();
   const isAdmin = AdminControl();
   const isDirector = DirectorControl();
-  console.log('vehicleID');
-  console.log(vehicleID);
 
   // Redux'tan gerekli state'leri al
   const { selectedVehicle, isSubmitting, error } = useSelector((state) => state.vehicle);
   const { kurumList } = useSelector((state) => state.kurum);
   const { user: currentUser } = useSelector((state) => state.user);
-  console.log('kurumList');
-  console.log(kurumList);
   const { mintikaList } = useSelector((state) => state.mintika);
 
   // Form state'i, ilk araç verisi geldiğinde veya yeni ekleme modunda boş olacak
@@ -53,14 +49,23 @@ export default function VehicleFormComponent({ vehicleID }) {
 
   // Bileşen yüklendiğinde veri çekme ve state'i doldurma
   useEffect(() => {
-    // Dropdown'lar için listeleri çek
-    dispatch(fetchMintikalar());
-    dispatch(fetchKurumlar());
+    if (isAdmin) dispatch(fetchMintikalar());
+    if (isDirector) dispatch(fetchKurumlar());
 
     if (isEditMode) {
       dispatch(fetchVehicleById(vehicleID));
     }
 
+    if (!isAdmin) {
+      setFormData((prev) => {
+        return { ...prev, mintika_id: currentUser.mintika_id };
+      });
+    }
+    if (!isAdmin && !isDirector) {
+      setFormData((prev) => {
+        return { ...prev, mintika_id: currentUser.mintika_id, kurum_id: currentUser.kurum_id };
+      });
+    }
     return () => {
       if (isEditMode) dispatch(clearSelectedVehicle());
     };
@@ -68,13 +73,6 @@ export default function VehicleFormComponent({ vehicleID }) {
 
   useEffect(() => {
     if (isEditMode && selectedVehicle) {
-      // Tarih alanlarını YYYY-MM-DD formatına çevir
-      /*const formattedData = {
-        ...selectedVehicle,
-        tax_due_date: selectedVehicle.tax_due_date
-          ? new Date(selectedVehicle.tax_due_date).toISOString().split('T')[0]
-          : '',
-      };*/
       setFormData(selectedVehicle);
     }
   }, [selectedVehicle, isEditMode]);
@@ -84,7 +82,6 @@ export default function VehicleFormComponent({ vehicleID }) {
     const { name, value } = e.target;
     setFormData((prev) => {
       const newFormData = { ...prev, [name]: value };
-      // Mıntıka değiştiğinde kurum seçimini sıfırla
       if (name === 'mintika_id') {
         newFormData.kurum_id = '';
       }
@@ -115,6 +112,8 @@ export default function VehicleFormComponent({ vehicleID }) {
     try {
       if (isEditMode) {
         // Düzenleme modu: updateVehicle thunk'ını çağır
+        console.log('vehicleID');
+        console.log(vehicleID);
         await dispatch(updateVehicle({ vehicleID, formData })).unwrap();
         await Swal.fire('Başarılı!', 'Araç bilgileri güncellendi.', 'success');
         navigate(`/vehicle/${vehicleID}`); // Detay sayfasına yönlendir
@@ -133,12 +132,16 @@ export default function VehicleFormComponent({ vehicleID }) {
   const filteredKurumList = formData.mintika_id
     ? kurumList.filter((k) => k.mintika_id == formData.mintika_id)
     : [];
-  console.log(typeof formData.mintika_id);
   // Yükleme veya veri gelmediyse gösterilecek UI
   // Düzenleme modunda veri gelmediyse de yükleniyor varsay
   /*if (loading || (!isEditMode && !formData) || (isEditMode && !formData)) {
     return <p className="text-center mt-5">Yükleniyor...</p>;
   }*/
+
+  if (error) {
+    return <div className="alert alert-danger">{error || 'Bilinmeyen hata'}</div>;
+  }
+
   if (isEditMode && !selectedVehicle) return <p>Yükleniyor...</p>;
 
   return (
@@ -237,34 +240,38 @@ export default function VehicleFormComponent({ vehicleID }) {
               </select>
             </div>
           )}
-          <div className="col-md-6">
-            <label htmlFor="kurum_id" className="form-label">
-              Kurum <span className="text-danger">*</span>
-            </label>
-            <select
-              id="kurum_id"
-              name="kurum_id"
-              className="form-select"
-              value={formData.kurum_id || ''} // Boş geldiğinde veya seçim yoksa '' kullan
-              onChange={handleChange}
-              // Kurum seçimi, Admin/Director için Mıntıka seçildikten sonra aktif olur
-              // Manager için ise zaten ID dolu gelecektir.
-              disabled={
-                (!formData.mintika_id && (isAdmin || isDirector)) ||
-                (isEditMode && currentUser.role === 'Kurum Yöneticisi')
-              }
-              required
-            >
-              <option value="">{formData.mintika_id ? 'Seçiniz...' : 'Önce Mıntıka Seçin'}</option>
-              {(!isEditMode || (isEditMode && formData.mintika_id)) &&
-                filteredKurumList.map((k) => (
-                  <option key={k.id} value={k.id}>
-                    {k.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          *{/* Mıntıka seçildiyse veya düzenleme modunda ID varsa, filtrelenmiş kurumları göster */}
+          {isDirector && (
+            <div className="col-md-6">
+              <label htmlFor="kurum_id" className="form-label">
+                Kurum <span className="text-danger">*</span>
+              </label>
+              <select
+                id="kurum_id"
+                name="kurum_id"
+                className="form-select"
+                value={formData.kurum_id || ''} // Boş geldiğinde veya seçim yoksa '' kullan
+                onChange={handleChange}
+                // Kurum seçimi, Admin/Director için Mıntıka seçildikten sonra aktif olur
+                // Manager için ise zaten ID dolu gelecektir.
+                disabled={
+                  (!formData.mintika_id && (isAdmin || isDirector)) ||
+                  (isEditMode && currentUser.role === 'Kurum Yöneticisi')
+                }
+                required
+              >
+                <option value="">
+                  {formData.mintika_id ? 'Seçiniz...' : 'Önce Mıntıka Seçin'}
+                </option>
+                {(!isEditMode || (isEditMode && formData.mintika_id)) &&
+                  filteredKurumList.map((k) => (
+                    <option key={k.id} value={k.id}>
+                      {k.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
+          {/* Mıntıka seçildiyse veya düzenleme modunda ID varsa, filtrelenmiş kurumları göster */}
           <hr className="col-12" />
           {/* Detay Bilgiler */}
           <div className="col-md-6">

@@ -106,6 +106,7 @@ export const UserSlice = createSlice({
   reducers: {
     clearSelectedUser: (state) => {
       state.selectedUser = null;
+      state.error = null;
     },
     setRedirectPath: (state, action) => {
       state.redirectPath = action.payload;
@@ -125,10 +126,12 @@ export const UserSlice = createSlice({
       const token = userData?.token;
 
       if (!token || isTokenExpired(token)) {
-        alert('Toxen patladı.');
         localStorage.removeItem('user');
         state.user = null;
       }
+    },
+    clearError: (state) => {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -208,6 +211,6 @@ export const UserSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { clearSelectedUser, logoutUser, checkSession } = UserSlice.actions;
+export const { clearSelectedUser, logoutUser, checkSession, clearError } = UserSlice.actions;
 
 export default UserSlice.reducer;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchUserById, clearSelectedUser } from '../../store/UserSlice';
+import { fetchUserById, clearSelectedUser, clearError } from '../../store/UserSlice';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 

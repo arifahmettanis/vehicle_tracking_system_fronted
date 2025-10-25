@@ -5,6 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 function Main() {
   const { user } = useSelector((state) => state.user);
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
   return (
     <>
       <Header></Header>

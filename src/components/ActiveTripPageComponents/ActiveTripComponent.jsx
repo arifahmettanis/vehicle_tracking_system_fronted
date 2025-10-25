@@ -42,7 +42,7 @@ function ActiveTripComponent() {
             <div className="d-flex align-items-center mb-2">
               <i className="bi bi-calendar me-2"></i>
               <span>
-                {/*format(activeTrip.start_date, 'dd MMMM yyyy EEEE HH:mm', { locale: tr })*/}
+                {format(activeTrip.start_date, 'dd MMMM yyyy EEEE HH:mm', { locale: tr })}
               </span>
             </div>
 
