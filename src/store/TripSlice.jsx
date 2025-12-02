@@ -5,6 +5,7 @@ import {
   completeTripAPI,
   assignTripAPI,
   getActiveTripsAPI,
+  getTripHistoryAPI,
 } from './api';
 
 const initialState = {
@@ -104,11 +105,7 @@ export const fetchTripHistory = createAsyncThunk(
   async (filters = {}, { rejectWithValue }) => {
     try {
       const response = await getTripHistoryAPI(filters);
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        return rejectWithValue(response.data);
-      }
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || { message: 'Geçmiş getirilemedi.' });
     }
@@ -133,12 +130,18 @@ export const fetchActiveTrips = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getActiveTripsAPI();
+      console.log('Aktif seyahatlar yanıtı:', response.data);
+
+      // API direkt array döndürüyor veya success wrapper'ında olabiliyor
       if (response.data.success) {
         return response.data.data;
+      } else if (Array.isArray(response.data)) {
+        return response.data;
       } else {
         return rejectWithValue(response.data);
       }
     } catch (error) {
+      console.error('Aktif seyahatlar hatası:', error);
       return rejectWithValue(error.response?.data || { message: 'Aktif seyahatlar getirilemedi.' });
     }
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
@@ -9,10 +9,11 @@ function ActiveTripsListComponent() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { activeTrips, loading, error } = useSelector((state) => state.trip);
+  const timeoutRef = useRef(null);
 
-  const isAdmin = AdminControl();
-  const isDirector = DirectorControl();
-  const isManager = ManagerControl();
+  const isAdmin = useMemo(() => AdminControl(), []);
+  const isDirector = useMemo(() => DirectorControl(), []);
+  const isManager = useMemo(() => ManagerControl(), []);
 
   const [filters, setFilters] = useState({
     kurum_name: '',
@@ -30,50 +31,81 @@ function ActiveTripsListComponent() {
     return () => clearInterval(interval);
   }, [dispatch]);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = useCallback((e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
       ...prev,
       [name]: value.toLowerCase(),
     }));
-  };
+  }, []);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       kurum_name: '',
       mintika_name: '',
       user_name: '',
       vehicle_plate: '',
     });
-  };
+  }, []);
 
-  // Filtreleri uygula
-  const filteredTrips = activeTrips.filter((trip) => {
-    const matchKurum = trip.kurum_name.toLowerCase().includes(filters.kurum_name);
-    const matchMintika = trip.mintika_name.toLowerCase().includes(filters.mintika_name);
-    const matchUser = trip.user_name.toLowerCase().includes(filters.user_name);
-    const matchPlate = trip.vehicle_plate.toLowerCase().includes(filters.vehicle_plate);
+  // Filtreleri uygula - memoized
+  const filteredTrips = useMemo(() => {
+    return activeTrips.filter((trip) => {
+      const matchKurum = trip.kurum_name.toLowerCase().includes(filters.kurum_name);
+      const matchMintika = trip.mintika_name.toLowerCase().includes(filters.mintika_name);
+      const matchUser = trip.user_name.toLowerCase().includes(filters.user_name);
+      const matchPlate = trip.vehicle_plate.toLowerCase().includes(filters.vehicle_plate);
 
-    // Rol bazlı filtreleme
-    if (isManager && !isDirector && !isAdmin) {
-      // Kurum yöneticisi - sadece kendi kurumunun seyahatlarını görsün
-      return (
-        matchKurum && matchMintika && matchUser && matchPlate && trip.kurum_name === user.kurum_name
-      );
-    } else if (isDirector && !isAdmin) {
-      // Mıntıka yöneticisi - sadece kendi mıntıkasının seyahatlarını görsün
-      return (
-        matchKurum &&
-        matchMintika &&
-        matchUser &&
-        matchPlate &&
-        trip.mintika_name === user.mintika_name
-      );
-    }
+      // Rol bazlı filtreleme
+      if (isManager && !isDirector && !isAdmin) {
+        // Kurum yöneticisi - sadece kendi kurumunun seyahatlarını görsün
+        return (
+          matchKurum &&
+          matchMintika &&
+          matchUser &&
+          matchPlate &&
+          trip.kurum_name === user.kurum_name
+        );
+      } else if (isDirector && !isAdmin) {
+        // Mıntıka yöneticisi - sadece kendi mıntıkasının seyahatlarını görsün
+        return (
+          matchKurum &&
+          matchMintika &&
+          matchUser &&
+          matchPlate &&
+          trip.mintika_name === user.mintika_name
+        );
+      }
 
-    // Admin - tüm seyahatları görsün
-    return matchKurum && matchMintika && matchUser && matchPlate;
-  });
+      // Admin - tüm seyahatları görsün
+      return matchKurum && matchMintika && matchUser && matchPlate;
+    });
+  }, [activeTrips, filters, isManager, isDirector, isAdmin, user.kurum_name, user.mintika_name]);
+
+  // Aktif süre hesapla - render tetiklemeden güncelle
+  const elapsedTimes = useMemo(() => {
+    const newElapsedTimes = {};
+    activeTrips.forEach((trip) => {
+      const startTime = new Date(trip.start_date).getTime();
+      const now = new Date().getTime();
+      const diffMs = now - startTime;
+
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+      newElapsedTimes[trip.id] = `${hours} saat ${minutes} dakika`;
+    });
+    return newElapsedTimes;
+  }, [activeTrips]);
+
+  // Sayfadan ayrılırken cleanup
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -166,9 +198,8 @@ function ActiveTripsListComponent() {
                   <th>Mıntıka</th>
                   <th>Hedef</th>
                   <th>Başlangıç</th>
-                  <th>Bitiş</th>
+                  <th>Aktif Süre</th>
                   <th>Sebep</th>
-                  <th>Durum</th>
                 </tr>
               </thead>
               <tbody>
@@ -195,20 +226,15 @@ function ActiveTripsListComponent() {
                       <td>
                         {format(new Date(trip.start_date), 'dd/MM/yyyy HH:mm', { locale: tr })}
                       </td>
-                      <td>{format(new Date(trip.end_date), 'dd/MM/yyyy HH:mm', { locale: tr })}</td>
+                      <td>{elapsedTimes[trip.id]}</td>
                       <td>
                         <small>{trip.reason}</small>
-                      </td>
-                      <td>
-                        <span className="badge bg-warning text-dark">
-                          {trip.trip_type === 'requested' ? 'İstek Beklemede' : 'Başlamış'}
-                        </span>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="9" className="text-center">
+                    <td colSpan="8" className="text-center">
                       Aktif seyehat bulunmamaktadır.
                     </td>
                   </tr>

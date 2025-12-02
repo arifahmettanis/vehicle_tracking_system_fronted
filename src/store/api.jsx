@@ -219,6 +219,4 @@ export const getActiveTripsAPI = () => {
   return apiClient.get('trips/active');
 };
 
-export const getTripHistoryAPI = (filters) => {
-  return apiClient.get('trips/completed');
-};
+export const getTripHistoryAPI = () => apiClient.get('trips/completed');

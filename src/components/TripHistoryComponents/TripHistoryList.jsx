@@ -1,5 +1,5 @@
-import React, { useState, useEffect, use } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 
@@ -11,17 +11,27 @@ import { fetchUserList } from '../../store/UserSlice';
 import { AdminControl, DirectorControl } from '../../components/GeneralComponents/AdminRoute';
 
 function TripHistoryList() {
+  console.log('TripHistoryList render oldu');
   const dispatch = useDispatch();
 
-  const isAdmin = AdminControl();
-  const isDirector = DirectorControl();
+  // combine selectors to avoid multiple subscriptions and extra renders
+  const { tripHistory, loading, error, kurumList, mintikaList, vehicleList, userList, user } =
+    useSelector(
+      (state) => ({
+        tripHistory: state.trip.tripHistory,
+        loading: state.trip.loading,
+        error: state.trip.error,
+        kurumList: state.kurum.kurumList,
+        mintikaList: state.mintika.mintikaList,
+        vehicleList: state.vehicle.vehicleList,
+        userList: state.user.userList,
+        user: state.user.user,
+      }),
+      shallowEqual
+    );
 
-  const { tripHistory, loading, error } = useSelector((state) => state.trip);
-  const { kurumList } = useSelector((state) => state.kurum);
-  const { mintikaList } = useSelector((state) => state.mintika);
-  const { vehicleList } = useSelector((state) => state.vehicle);
-  const { userList } = useSelector((state) => state.user);
-
+  const isAdmin = useMemo(() => user?.role === 'Admin', [user?.role]);
+  const isDirector = useMemo(() => user?.role === 'Mıntıka Yöneticisi', [user?.role]);
   const [filters, setFilters] = useState({
     vehicleId: null,
     userId: null,
@@ -38,7 +48,7 @@ function TripHistoryList() {
     dispatch(fetchUserList());
     if (isDirector) dispatch(fetchKurumlar()); // Director veya Admin ise kurum listesini çeker
     if (isAdmin) dispatch(fetchMintikalar()); // Sadece Admin ise mıntıka listesini çeker
-  }, [dispatch]);
+  }, [dispatch, isDirector, isAdmin]);
 
   useEffect(() => {
     setFilters((prev) => ({ ...prev, kurumId: null }));
@@ -92,7 +102,6 @@ function TripHistoryList() {
     }
     return vehicleList.filter((vehicle) => vehicle.kurum_id == filters.kurumId);
   }, [filters.mintikaId, filters.kurumId, vehicleList]);
-  console.log(filters);
   return (
     <>
       <div className="card">
@@ -253,7 +262,7 @@ function TripHistoryList() {
                   tripHistory.map((trip) => (
                     <tr key={trip.id}>
                       <td>
-                        <strong>{trip.plate}</strong>
+                        <strong>{trip.vehicle_plate}</strong>
                       </td>
                       <td>{trip.user_name}</td>
                       <td>{trip.kurum_name}</td>
