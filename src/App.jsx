@@ -42,6 +42,7 @@ import StartTripPage from './pages/Trip/StartTrip';
 import ActiveTripPage from './pages/Trip/ActiveTrip';
 import CompleteTripPage from './pages/Trip/CompleteTrip';
 import AssignTrip from './pages/Trip/AssignTrip';
+import ActiveTripsPage from './pages/Trip/ActiveTripsPage';
 
 function App() {
   const { user, status } = useSelector((store) => store.user);
@@ -69,6 +70,14 @@ function App() {
           <Route path="/trip/active" element={<ActiveTripPage></ActiveTripPage>}></Route>
           <Route path="/trip/complete" element={<CompleteTripPage></CompleteTripPage>}></Route>
           <Route path="/trip/report" element={<ReportIncident></ReportIncident>}></Route>
+          <Route
+            path="/trip/active-list"
+            element={
+              <ManagerRoute>
+                <ActiveTripsPage></ActiveTripsPage>
+              </ManagerRoute>
+            }
+          ></Route>
           {/* ONLY MANAGER */}
           <Route
             path="/vehicle/list"

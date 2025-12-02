@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { startTripAPI, fetchActiveTripAPI, completeTripAPI, assignTripAPI } from './api';
+import {
+  startTripAPI,
+  fetchActiveTripAPI,
+  completeTripAPI,
+  assignTripAPI,
+  getActiveTripsAPI,
+} from './api';
 
 const initialState = {
   activeTrip: localStorage.getItem('currentTrip')
     ? JSON.parse(localStorage.getItem('currentTrip'))
     : null,
   tripHistory: [],
+  activeTrips: [],
   loading: false,
   error: null,
   errors: {
@@ -121,6 +128,22 @@ export const assignTrip = createAsyncThunk('trip/assign', async (tripData, { rej
   }
 });
 
+export const fetchActiveTrips = createAsyncThunk(
+  'trip/fetchActiveTrips',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getActiveTripsAPI();
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        return rejectWithValue(response.data);
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: 'Aktif seyahatlar getirilemedi.' });
+    }
+  }
+);
+
 export const TripSlice = createSlice({
   name: 'TripSlice',
   initialState,
@@ -215,6 +238,22 @@ export const TripSlice = createSlice({
       .addCase(fetchTripHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
+      });
+
+    builder
+      .addCase(fetchActiveTrips.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchActiveTrips.fulfilled, (state, action) => {
+        state.loading = false;
+        state.activeTrips = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchActiveTrips.rejected, (state, action) => {
+        state.loading = false;
+        state.activeTrips = [];
+        state.error = action.payload?.message || 'Aktif seyahatlar getirilemedi.';
       });
   },
 });

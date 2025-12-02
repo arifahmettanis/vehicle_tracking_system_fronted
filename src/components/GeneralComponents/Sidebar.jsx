@@ -32,6 +32,12 @@ function Sidebar() {
                   <span>Seyehat Geçmişleri</span>
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link collapsed" to="/trip/active-list">
+                  <i className="bi bi-clock-history"></i>
+                  <span>Aktif Seyahatlar</span>
+                </Link>
+              </li>
               <li className="nav-heading">YÖNETİM</li>
               <li className="nav-item">
                 <Link className="nav-link collapsed" to="/vehicle/list">

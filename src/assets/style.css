@@ -250,3 +250,27 @@ body.has-banner .main {
     color: #28a745;
     font-size: 14px;
 }
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+.table-responsive {
+    border-radius: 4px;
+}

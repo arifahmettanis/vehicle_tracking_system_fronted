@@ -202,3 +202,23 @@ export const createKurumAPI = (data) => {
 export const updateKurumAPI = (id, data) => {
   return apiClient.put('kurumlar/' + id, { ...data });
 };
+
+/**
+ * Dashboard verilerini rol bazlı şekilde getirir.
+ * @returns {Promise<object>}
+ */
+export const getDashboardDataAPI = () => {
+  return apiClient.get('general/dashboard');
+};
+
+/**
+ * Aktif seyahatları getirir.
+ * @returns {Promise<object>}
+ */
+export const getActiveTripsAPI = () => {
+  return apiClient.get('trips/active');
+};
+
+export const getTripHistoryAPI = (filters) => {
+  return apiClient.get('trips/completed');
+};
